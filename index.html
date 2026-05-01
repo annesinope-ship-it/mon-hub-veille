@@ -12,38 +12,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ld:#1D9E75;--ld-light:#E6F7F0;
-  --tr:#2563EB;--tr-light:#EEF4FF;
-  --cl:#7C3AED;--cl-light:#F3EFFE;
-  --co:#D85A30;--co-light:#FEF0EA;
-  --cx:#BE185D;--cx-light:#FDF0F6;
-  --bg:#F4F2ED;--surface:#fff;--border:#E2DFD6;
-  --text:#18181B;--muted:#6B7280;--soft:#9CA3AF;
+  --ld:#1D9E75;--tr:#2563EB;--cl:#7C3AED;--co:#D85A30;--cx:#BE185D;
+  --bg:#F4F2ED;--surface:#fff;--border:#E2DFD6;--text:#18181B;--muted:#6B7280;--soft:#9CA3AF;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
-
-/* HEADER */
 header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:100}
 .logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;letter-spacing:-.3px}
 .logo span{color:var(--ld)}
-.hdr-right{display:flex;align-items:center;gap:12px}
-#last-update{font-size:12px;color:var(--muted)}
+.hdr-r{display:flex;align-items:center;gap:12px}
+#last-upd{font-size:12px;color:var(--muted)}
 .btn-all{background:var(--text);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity .15s}
-.btn-all:hover{opacity:.82}
-.btn-all:disabled{opacity:.4;cursor:not-allowed}
-.progress-wrap{height:3px;background:var(--border);display:none}
-.progress-fill{height:100%;background:var(--ld);transition:width .4s;width:0}
-
-/* NAV */
+.btn-all:hover{opacity:.82}.btn-all:disabled{opacity:.4;cursor:not-allowed}
+.pw{height:3px;background:var(--border);display:none}
+.pf{height:100%;background:var(--ld);transition:width .4s;width:0}
 nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;overflow-x:auto;gap:2px}
 nav::-webkit-scrollbar{display:none}
 .nb{padding:13px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:all .15s}
-.nb:hover{color:var(--text)}
-.nb.active{color:var(--text);font-weight:500;border-bottom-color:var(--text)}
+.nb:hover{color:var(--text)}.nb.active{color:var(--text);font-weight:500;border-bottom-color:var(--text)}
 .np{width:7px;height:7px;border-radius:50%}
-
-main{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+main{max-width:940px;margin:0 auto;padding:2rem 1.5rem}
 .panel{display:none}.panel.active{display:block}
 
 /* OVERVIEW */
@@ -52,108 +40,131 @@ main{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
 .ov-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
 .ov-card.ld::after{background:var(--ld)}.ov-card.tr::after{background:var(--tr)}.ov-card.cl::after{background:var(--cl)}.ov-card.co::after{background:var(--co)}.ov-card.cx::after{background:var(--cx)}
 .ov-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.08)}
-.ov-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.ov-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
 .ov-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
-.ov-aud{font-size:11px;color:var(--muted);margin-bottom:8px}
+.ov-aud{font-size:11px;color:var(--muted);margin-bottom:7px}
 .ov-snip{font-size:12px;color:var(--muted);line-height:1.5}
 .badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
 .b-ok{background:#E6F7F0;color:#0F6E56}.b-no{background:#F1EFE8;color:#78716C}.b-load{background:#FEF3C7;color:#92400E}
 .howto{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;font-size:13px;color:var(--muted);line-height:1.7}
 .howto strong{color:var(--text);font-weight:500}
 
+/* TOPIC SUBNAV */
+.subnav{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap}
+.snb{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:6px 14px;border-radius:20px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);transition:all .15s}
+.snb:hover{color:var(--text);border-color:var(--text)}
+.snb.active{color:var(--surface);border-color:transparent}
+
+/* TOPIC PANELS */
+.tpanel{display:none}.tpanel.active{display:block}
+
 /* NEWSLETTER HEADER */
-.nl-hdr{padding:1.75rem 0 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1.75rem}
-.nl-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:.6rem}
+.nl-hdr{padding:1.5rem 0 1.25rem;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.nl-ey{display:flex;align-items:center;gap:8px;margin-bottom:.5rem}
 .nl-dot{width:8px;height:8px;border-radius:50%}
-.nl-eye-txt{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.nl-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.4px;margin-bottom:.5rem}
-.nl-sub{font-size:15px;font-weight:300;color:var(--muted);font-style:italic;margin-bottom:1.1rem}
+.nl-eytxt{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.nl-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.4px;margin-bottom:.4rem}
+.nl-sub{font-size:14px;font-weight:300;color:var(--muted);font-style:italic;margin-bottom:1rem}
 .nl-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .nl-tags{display:flex;flex-wrap:wrap;gap:5px}
 .nl-tag{font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--border);color:var(--muted)}
 .nl-btns{display:flex;gap:7px}
 .btn-x{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);transition:background .15s;font-family:'DM Sans',sans-serif}
-.btn-x:hover{background:var(--bg)}
-.btn-x.dark{background:var(--text);color:#fff;border-color:transparent}
-.btn-x.dark:hover{opacity:.82;background:var(--text)}
+.btn-x:hover{background:var(--bg)}.btn-x.dark{background:var(--text);color:#fff;border-color:transparent}.btn-x.dark:hover{opacity:.82;background:var(--text)}
 
-/* DIGEST SECTIONS */
-.digest{display:flex;flex-direction:column;gap:12px}
-
-/* CARD BASE */
+/* DIGEST CARDS */
+.digest{display:flex;flex-direction:column;gap:10px}
 .dc{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.dc-head{display:flex;align-items:center;gap:10px;padding:.85rem 1.25rem;border-bottom:1px solid var(--border)}
+.dc-head{display:flex;align-items:center;gap:10px;padding:.8rem 1.25rem;border-bottom:1px solid var(--border)}
 .dc-num{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--soft)}
 .dc-lbl{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text)}
-.dc-body{padding:1.1rem 1.25rem;font-size:14px;line-height:1.8;color:#374151}
+.dc-body{padding:1rem 1.25rem;font-size:14px;line-height:1.8;color:#374151}
 .dc-body p{margin-bottom:.8em}.dc-body p:last-child{margin-bottom:0}
-
-/* STAT PILL inside card */
-.stat-pill{display:inline-flex;align-items:baseline;gap:6px;background:var(--bg);border-radius:8px;padding:6px 12px;margin:.5rem 0;font-size:13px}
-.stat-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:700}
-.stat-lbl{font-size:12px;color:var(--muted)}
-
-/* CAS cards grid */
-.cas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;padding:1.1rem 1.25rem}
-.cas-item{background:var(--bg);border-radius:10px;padding:.9rem 1rem}
+.cas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;padding:1rem 1.25rem}
+.cas-item{background:var(--bg);border-radius:10px;padding:.85rem 1rem}
 .cas-co{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;margin-bottom:4px}
 .cas-txt{font-size:13px;line-height:1.65;color:#374151}
 .cas-lesson{font-size:12px;font-weight:500;color:var(--text);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
-
-/* TENSIONS */
-.tension-list{display:flex;flex-direction:column;gap:0;padding:0 1.25rem}
-.tension-item{padding:.9rem 0;border-bottom:1px solid var(--bg);display:grid;grid-template-columns:auto 1fr;gap:.75rem;align-items:start}
-.tension-item:last-child{border-bottom:none}
-.tension-vs{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;background:var(--bg);border-radius:6px;padding:4px 8px;white-space:nowrap;color:var(--text)}
-.tension-txt{font-size:13px;line-height:1.65;color:#374151}
-
-/* QUESTIONS */
-.q-list{padding:.75rem 1.25rem;display:flex;flex-direction:column;gap:8px}
-.q-item{display:flex;gap:10px;padding:.65rem .85rem;border-radius:8px;background:var(--bg);align-items:flex-start}
-.q-num{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--soft);flex-shrink:0;margin-top:1px}
-.q-txt{font-size:13px;line-height:1.6;color:#374151}
-
-/* PUNCHLINE */
+.tension-list{display:flex;flex-direction:column;padding:0 1.25rem}
+.ti{padding:.85rem 0;border-bottom:1px solid var(--bg);display:grid;grid-template-columns:auto 1fr;gap:.75rem;align-items:start}
+.ti:last-child{border-bottom:none}
+.ti-vs{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;background:var(--bg);border-radius:6px;padding:4px 8px;white-space:nowrap}
+.ti-txt{font-size:13px;line-height:1.65;color:#374151}
+.q-list{padding:.75rem 1.25rem;display:flex;flex-direction:column;gap:7px}
+.qi{display:flex;gap:10px;padding:.65rem .85rem;border-radius:8px;background:var(--bg);align-items:flex-start}
+.qi-n{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--soft);flex-shrink:0;margin-top:1px}
+.qi-t{font-size:13px;line-height:1.6;color:#374151}
 .punchline{border-radius:14px;padding:1.5rem 1.75rem;margin-top:4px}
-.pl-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.55;margin-bottom:.6rem}
-.pl-txt{font-family:'Syne',sans-serif;font-size:19px;font-weight:600;line-height:1.4;letter-spacing:-.2px}
-.pl-synth{font-size:13px;line-height:1.7;opacity:.8;margin-bottom:.85rem}
-
-/* EMPTY / LOADING */
-.nl-empty{padding:3.5rem 0;text-align:center;color:var(--muted);font-size:14px}
-.nl-empty strong{display:block;color:var(--text);font-weight:500;font-size:15px;margin-bottom:5px}
-.nl-loading{padding:3.5rem 0;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.pl-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.6;margin-bottom:.5rem;color:#fff}
+.pl-synth{font-size:13px;line-height:1.7;color:#fff;opacity:.85;margin-bottom:.85rem}
+.pl-txt{font-family:'Syne',sans-serif;font-size:19px;font-weight:600;line-height:1.4;letter-spacing:-.2px;color:#fff}
+.nl-empty{padding:3rem 0;text-align:center;color:var(--muted);font-size:14px}
+.nl-empty strong{display:block;color:var(--text);font-size:15px;font-weight:500;margin-bottom:5px}
+.nl-loading{padding:3rem 0;display:flex;flex-direction:column;align-items:center;gap:1rem}
 .spinner{width:26px;height:26px;border:2px solid var(--border);border-top-color:var(--text);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .nl-loading p{font-size:13px;color:var(--muted)}
 
+/* GLOSSARY */
+.gloss-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:10px;flex-wrap:wrap}
+.gloss-search{padding:8px 12px;font-size:13px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;width:220px}
+.gloss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:1.5rem}
+.gt{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem}
+.gt-term{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:4px}
+.gt-acro{font-size:11px;font-weight:500;padding:2px 7px;border-radius:20px;display:inline-block;margin-bottom:6px}
+.gt-def{font-size:13px;line-height:1.65;color:#374151;margin-bottom:6px}
+.gt-usage{font-size:11px;color:var(--muted);font-style:italic}
+.add-notion-form{background:var(--surface);border:1px dashed var(--border);border-radius:12px;padding:1rem 1.25rem;margin-top:4px}
+.add-notion-form h4{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:10px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.form-row.full{grid-template-columns:1fr}
+.fi{padding:7px 10px;font-size:13px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;width:100%}
+.fi:focus{outline:none;border-color:var(--text)}
+
+/* EDITOR MAP */
+.emap-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px}
+.emap-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;overflow-x:auto}
+.emap-cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:1.25rem}
+.ecat{border-radius:10px;padding:.9rem 1rem}
+.ecat-lbl{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.ecat-items{display:flex;flex-direction:column;gap:5px}
+.eitem{background:rgba(255,255,255,.6);border-radius:7px;padding:.5rem .7rem}
+.eitem-name{font-size:12px;font-weight:500;margin-bottom:2px}
+.eitem-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.emap-vs{margin-top:.75rem}
+.emap-vs-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+.vs-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-bottom:8px;background:var(--bg);border-radius:10px;padding:.75rem 1rem}
+.vs-a,.vs-b{font-size:13px;line-height:1.55}
+.vs-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;margin-bottom:2px}
+.vs-pill{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--muted);text-align:center}
+.emap-loading{padding:2rem;text-align:center;color:var(--muted);font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px}
+
 /* HISTORY */
 .h-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:1.5rem}
 .h-week{margin-bottom:1.5rem}
-.h-wlbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-bottom:7px;border-bottom:1px solid var(--border);margin-bottom:10px}
-.h-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;margin-bottom:7px}
-.h-top{display:flex;align-items:center;gap:7px;margin-bottom:4px}
-.h-dot{width:7px;height:7px;border-radius:50%}
-.h-lbl{font-size:13px;font-weight:500}
-.h-date{font-size:11px;color:var(--muted);margin-left:auto}
-.h-memo{font-size:12px;color:var(--muted);line-height:1.6}
+.hw-lbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-bottom:7px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.hi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;margin-bottom:7px}
+.hi-top{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.hi-dot{width:7px;height:7px;border-radius:50%}
+.hi-lbl{font-size:13px;font-weight:500}
+.hi-date{font-size:11px;color:var(--muted);margin-left:auto}
+.hi-memo{font-size:12px;color:var(--muted);line-height:1.6}
 
-@media(max-width:640px){main{padding:1.25rem 1rem}header,nav{padding-left:1rem;padding-right:1rem}.nl-title{font-size:22px}.cas-grid{grid-template-columns:1fr}}
+@media(max-width:640px){main{padding:1.25rem 1rem}header,nav{padding-left:1rem;padding-right:1rem}.nl-title{font-size:20px}.form-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo">Hub<span>.</span>Veille</div>
-  <div class="hdr-right">
-    <span id="last-update">Jamais actualisé</span>
+  <div class="hdr-r">
+    <span id="last-upd">Jamais actualisé</span>
     <button class="btn-all" id="btn-all" onclick="refreshAll()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
       Tout actualiser
     </button>
   </div>
 </header>
-<div class="progress-wrap" id="pw"><div class="progress-fill" id="pf"></div></div>
+<div class="pw" id="pw"><div class="pf" id="pf"></div></div>
 
 <nav id="main-nav">
   <button class="nb active" data-view="overview">Vue d'ensemble</button>
@@ -168,7 +179,7 @@ main{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
 <main>
   <div class="panel active" id="view-overview">
     <div class="ov-grid" id="ov-grid"></div>
-    <div class="howto">Chaque semaine, cliquez sur <strong>Tout actualiser</strong> pour générer les 5 newsletters. Chaque édition est structurée pour être lue en 5 minutes et vous permettre de tenir une conversation de qualité avec des C-levels.</div>
+    <div class="howto">Chaque semaine, cliquez sur <strong>Tout actualiser</strong> pour générer les 5 newsletters. Le répertoire et la cartographie éditeurs sont disponibles en permanence dans chaque sujet — actualisables séparément.</div>
   </div>
   <div class="panel" id="view-ld"></div>
   <div class="panel" id="view-tr"></div>
@@ -182,60 +193,172 @@ main{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
 </main>
 
 <script>
-const PROMPT = (label, ctx) => `Tu es expert senior en ${label}. Tu écris une newsletter de veille en français pour un non-expert qui organise des dîners avec des ${ctx}.
+// ── PROMPTS ──────────────────────────────────────────────────
+const NL_PROMPT = (label, ctx) => `Tu es expert senior en ${label}. Tu écris une newsletter de veille hebdomadaire en français pour une non-experte qui organise des dîners et événements avec des ${ctx}.
 
-RÈGLES ABSOLUES DE FORMAT :
-- Chaque section commence par son titre EXACTEMENT comme indiqué, seul sur sa ligne
-- Après chaque titre, saute une ligne puis écris le contenu
-- Sépare les paragraphes par une ligne vide
-- Sois concis : 2-3 paragraphes max par section, phrases courtes et percutantes
-- Pas de bullet points sauf pour QUESTIONS À POSER
-- Pour CAS ENTREPRISES : écris exactement 3 blocs séparés par "---" avec format: NOM ENTREPRISE\nSituation + problème + décision\nLeçon: [une phrase]
-- Pour TENSIONS CLÉS : écris exactement 3 lignes format "X vs Y :: explication courte"
-- Pour QUESTIONS À POSER : exactement 5 questions numérotées 1. 2. 3. 4. 5.
-- Pour SYNTHÈSE ET PHRASE CLÉ : d'abord 2-3 phrases de synthèse, puis une ligne commençant par "PHRASE:" suivie de la punchline
+RÈGLE ABSOLUE : à la première mention de tout acronyme ou terme technique, ajoute une courte explication entre parenthèses. Ex: "le LMS (logiciel de gestion des formations)" ou "CSRD (nouvelle réglementation européenne sur le reporting durabilité des entreprises)".
 
-Génère ces 7 sections dans cet ordre exact :
+FORMAT STRICT — chaque titre seul sur sa ligne, suivi d'une ligne vide :
 
 LECTURE DU MARCHÉ
+[Comment fonctionne ce marché aujourd'hui — grands acteurs, tensions, contexte. 3 paragraphes narratifs. Pas de bullets.]
 
 CAS ENTREPRISES
+[3 exemples d'entreprises connues. Format pour chaque : NOM ENTREPRISE sur sa propre ligne, puis 2-3 phrases situation+décision, puis "Leçon : [une phrase]". Sépare les 3 cas par une ligne contenant uniquement "---".]
 
-ANALYSE DES ÉDITEURS
+ENJEUX BUSINESS
+[3-4 problèmes concrets que vivent ces décideurs aujourd'hui. Leurs arbitrages réels, leurs frustrations. Terrain, pas théorie. 2-3 paragraphes.]
 
 TENSIONS CLÉS
-
-ENJEUX CLIENTS
+[3 tensions majeures. Format exact pour chaque : "TERME A vs TERME B :: explication courte en une phrase". Une tension par ligne.]
 
 QUESTIONS À POSER
+[5 questions numérotées 1. à 5. Du simple au stratégique. Utilisables en vrai dîner avec ces décideurs.]
 
-SYNTHÈSE ET PHRASE CLÉ
+ANALYSE DES ÉDITEURS
+[D'abord : expliquer en 1 paragraphe ce que font ces éditeurs concrètement pour les entreprises (à quoi ça sert, qui l'achète, pourquoi). Puis cartographie en 3-4 familles. Puis 2-3 comparaisons directes A vs B avec positionnement et usage réel. Puis dynamique : qui monte, qui est sous pression, impact de l'IA.]
 
-Commence directement par LECTURE DU MARCHÉ.`;
+PHRASE CLÉ
+[Une seule phrase mémorable et simple, utilisable en conversation pour paraître crédible sans être expert. Pas de titre, juste la phrase.]`;
 
-const TOPICS=[
+const MAP_PROMPT = (label, ctx, existing) => `Tu es expert en ${label}. Génère une cartographie des éditeurs/acteurs technologiques pour ${ctx}.
+
+${existing ? `Cartographie existante à enrichir (intègre ces données, ne supprime rien, ajoute ce qui manque) :\n${JSON.stringify(existing)}\n` : ''}
+
+Réponds UNIQUEMENT en JSON valide, sans markdown, sans backticks :
+{
+  "categories": [
+    {
+      "name": "Nom catégorie",
+      "color": "#hexcouleur",
+      "role": "Ce que font ces acteurs pour les entreprises en 1 phrase",
+      "actors": [
+        {"name": "Nom éditeur", "desc": "Ce qu'il fait concrètement en 1-2 phrases courtes"}
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "a": {"name": "Éditeur A", "position": "Son positionnement en 1 phrase"},
+      "b": {"name": "Éditeur B", "position": "Son positionnement en 1 phrase"},
+      "diff": "La vraie différence d'usage en 1 phrase"
+    }
+  ]
+}
+Génère 3-4 catégories et 3 comparaisons. Sois concis et précis.`;
+
+// ── STATIC GLOSSARY DATA ──────────────────────────────────────
+const BASE_GLOSSARY = {
+  ld: [
+    {term:'LMS',full:'Learning Management System',def:'Plateforme qui héberge et distribue les formations en ligne. C\'est le "catalogue" — on s\'y connecte pour suivre un cours et obtenir une attestation.',usage:'Cornerstone, Docebo, SAP SuccessFactors'},
+    {term:'LXP',full:'Learning Experience Platform',def:'Évolution du LMS centrée sur l\'apprenant. Propose des contenus personnalisés, recommandations IA, apprentissage social. Plus Netflix que bibliothèque.',usage:'Degreed, 360Learning, EdCast'},
+    {term:'AFEST',full:'Action de Formation En Situation de Travail',def:'Formation directement intégrée dans l\'activité professionnelle, avec un temps de réflexivité. Reconnue par la loi française depuis 2018.',usage:'Terrain, industrie, alternance'},
+    {term:'Skills-based org',full:'Organisation basée sur les compétences',def:'Entreprise qui pilote RH, recrutement et formation par les compétences réelles plutôt que par les postes et diplômes.',usage:'Schneider Electric, IBM, Unilever'},
+    {term:'70-20-10',full:'Modèle d\'apprentissage',def:'70% de l\'apprentissage vient du terrain, 20% des collègues/mentors, 10% des formations formelles. Sert à relativiser la place du e-learning.',usage:'À citer pour contextualiser le ROI formation'},
+    {term:'Kirkpatrick',full:'Modèle d\'évaluation à 4 niveaux',def:'Évalue une formation : niveau 1 (j\'ai aimé ?), 2 (j\'ai appris ?), 3 (je change mes comportements ?), 4 (impact business ?). Les niveaux 3 et 4 sont rarement mesurés.',usage:'ROI de la formation, comité de direction'},
+  ],
+  tr: [
+    {term:'Cash pooling',full:'Centralisation de trésorerie',def:'Technique qui regroupe les soldes de trésorerie de plusieurs filiales dans un compte central. Permet d\'optimiser les placements et réduire les emprunts.',usage:'Groupes avec plusieurs filiales'},
+    {term:'Hedging',full:'Couverture de risque',def:'Stratégie financière pour se protéger contre les variations de taux de change ou de taux d\'intérêt. Ex : une entreprise exportatrice qui "fixe" son taux de change à l\'avance.',usage:'Trésoriers, CFO de groupes internationaux'},
+    {term:'ALM',full:'Asset & Liability Management',def:'Gestion de l\'équilibre entre actifs (ce qu\'on possède) et passifs (ce qu\'on doit). Surtout utilisé dans les banques pour piloter le risque de taux.',usage:'Banques, assurances, grandes trésoreries'},
+    {term:'Covenant',full:'Clause restrictive de contrat de dette',def:'Engagement pris envers une banque lors d\'un emprunt. Ex : "notre dette ne dépassera pas 3x notre EBITDA". Si violé, la banque peut exiger le remboursement.',usage:'CFO, directions financières endettées'},
+    {term:'SWIFT',full:'Society for Worldwide Interbank Financial Telecommunication',def:'Réseau mondial de messagerie sécurisée entre banques pour les virements internationaux. "Être exclu du SWIFT" = coupure du système financier mondial.',usage:'Paiements internationaux, compliance'},
+    {term:'TMS',full:'Treasury Management System',def:'Logiciel de gestion de trésorerie. Centralise les flux, automatise les prévisions de cash, pilote les placements et les couvertures de risque.',usage:'Kyriba, SAP TRM, ION Treasury'},
+  ],
+  cl: [
+    {term:'IaaS / PaaS / SaaS',full:'3 niveaux de service cloud',def:'IaaS = infrastructure louée (serveurs). PaaS = plateforme pour développer des apps. SaaS = logiciel directement utilisable (ex: Salesforce). Plus on monte vers SaaS, moins on gère.',usage:'AWS, Azure, Google Cloud'},
+    {term:'Zero Trust',full:'Modèle de sécurité "ne jamais faire confiance"',def:'Architecture de sécurité qui vérifie l\'identité à chaque accès, même depuis l\'intérieur du réseau. Fin du VPN comme seule barrière.',usage:'RSSI, architectes sécurité'},
+    {term:'FinOps',full:'Financial Operations pour le cloud',def:'Discipline qui applique la rigueur financière aux dépenses cloud. Les coûts cloud varient en temps réel — FinOps les pilote comme un budget dynamique.',usage:'DSI, DAF, FinOps teams'},
+    {term:'SASE',full:'Secure Access Service Edge',def:'Architecture qui combine réseau et sécurité dans le cloud. Remplace les équipements physiques (pare-feu, VPN) par des services cloud unifiés.',usage:'CIO, RSSI de grandes entreprises'},
+    {term:'NIS2',full:'Network and Information Security Directive 2',def:'Réglementation européenne (2024) qui renforce les obligations de cybersécurité pour ~100 000 entreprises en Europe. Sanctions financières si non-conforme.',usage:'RSSI, DPO, directions juridiques'},
+    {term:'DORA',full:'Digital Operational Resilience Act',def:'Règlement européen (2025) qui impose aux institutions financières de tester leur résilience numérique et de gérer les risques liés à leurs prestataires cloud.',usage:'DSI banques/assurances, RSSI'},
+  ],
+  co: [
+    {term:'IFRS',full:'International Financial Reporting Standards',def:'Normes comptables internationales utilisées par les groupes cotés en Europe. Définissent comment comptabiliser les actifs, dettes et résultats. Publiées par l\'IASB.',usage:'Directeurs consolidation, CAC'},
+    {term:'CSRD',full:'Corporate Sustainability Reporting Directive',def:'Réglementation européenne (applicable depuis 2024-2026 selon taille) qui oblige les entreprises à publier un rapport de durabilité audité, aussi rigoureux que le rapport financier.',usage:'DAF, directeurs consolidation, RSE'},
+    {term:'Goodwill',full:'Survaleur ou écart d\'acquisition',def:'Différence entre le prix payé pour racheter une entreprise et sa valeur comptable. Ex : payer 100M€ une société qui vaut 60M€ → 40M€ de goodwill au bilan.',usage:'M&A, consolidation post-acquisition'},
+    {term:'IFRS 16',full:'Norme sur les contrats de location',def:'Depuis 2019, oblige les entreprises à inscrire leurs locations (bureaux, véhicules, machines) dans leur bilan. A fait exploser les dettes des groupes avec beaucoup de magasins.',usage:'Retail, transport, immobilier'},
+    {term:'Clôture',full:'Arrêté des comptes',def:'Processus de fin de période (mensuel, trimestriel, annuel) où toutes les entités du groupe remontent leurs chiffres pour les consolider. Les "délais de clôture" sont un sujet majeur.',usage:'Directeurs consolidation, contrôle de gestion'},
+    {term:'Reporting intégré',full:'Rapport unifié financier + extra-financier',def:'Tendance à fusionner le rapport financier annuel et le rapport de durabilité (CSRD) en un seul document cohérent. Porté par le cadre IIRC.',usage:'DAF, communications financières'},
+  ],
+  cx: [
+    {term:'NPS',full:'Net Promoter Score',def:'Indicateur qui mesure la probabilité qu\'un client recommande la marque (0-10). Score = % de "promoteurs" (9-10) minus % de "détracteurs" (0-6). Standard mondial mais de plus en plus contesté.',usage:'Dir. CX, marketing, DG'},
+    {term:'CES',full:'Customer Effort Score',def:'Mesure l\'effort fourni par le client pour résoudre un problème. Corrèle mieux avec la fidélité que le NPS selon de nombreuses études.',usage:'Service client, UX, parcours client'},
+    {term:'CLV / LTV',full:'Customer Lifetime Value',def:'Valeur totale générée par un client sur toute sa durée de relation. Permet de justifier un coût d\'acquisition élevé si la valeur long terme est forte.',usage:'E-commerce, SaaS, banques, assurances'},
+    {term:'Omnicanal',full:'Expérience client unifiée sur tous les canaux',def:'Le client passe du site web à l\'app, en magasin, au téléphone — sans avoir à se répéter. L\'historique suit partout. Difficile à opérationnaliser.',usage:'Retail, banque, telco'},
+    {term:'VoC',full:'Voice of Customer',def:'Programme structuré de collecte et d\'analyse des retours clients (enquêtes, verbatims, tickets support, réseaux sociaux) pour piloter l\'amélioration de l\'expérience.',usage:'Dir. CX, marketing, produit'},
+    {term:'Churn',full:'Taux d\'attrition',def:'Pourcentage de clients qui partent sur une période. Indicateur critique pour les modèles par abonnement. Réduire le churn de 1% peut valoir des millions.',usage:'SaaS, télécom, banques, assurances'},
+  ],
+};
+
+// ── METIER CARDS ─────────────────────────────────────────────
+const BASE_METIER = {
+  ld: {
+    quoi: "Le Learning & Development (L&D) est la fonction de l'entreprise qui s'occupe de former et développer les compétences des collaborateurs. C'est la direction qui décide quoi apprendre, comment, et pour qui.",
+    apporte: "Elle permet à l'entreprise de ne pas recruter à l'extérieur pour chaque nouvelle compétence, de préparer les managers de demain, d'accompagner les transformations (IA, RSE, nouveaux métiers) et de retenir les talents qui veulent progresser.",
+    hierarchie: "La direction L&D est généralement rattachée à la DRH (Direction des Ressources Humaines), elle-même rattachée au DG ou au COMEX. Dans les grands groupes, il peut y avoir un Chief Learning Officer (CLO) au niveau groupe.",
+    interlocuteurs: "DRH, CHRO (Chief Human Resources Officer), CLO (Chief Learning Officer), Responsables Formation, Directeurs Talent & Développement, Business Partners RH.",
+    budget: "Le budget formation représente en moyenne 1 à 3% de la masse salariale. Dans les grands groupes, cela peut représenter plusieurs dizaines de millions d'euros par an.",
+    enjeux_quotidien: "Choisir et piloter les prestataires de formation, justifier le ROI de la formation auprès du COMEX, gérer la plateforme LMS, concevoir les parcours d'onboarding et de leadership, et de plus en plus : former à l'IA."
+  },
+  tr: {
+    quoi: "La Trésorerie gère l'argent disponible de l'entreprise au quotidien : s'assurer qu'elle a toujours les liquidités pour payer ses fournisseurs, salaires et dettes, et placer les excédents de cash pour qu'ils rapportent.",
+    apporte: "Elle évite à l'entreprise de se retrouver à court de cash (ce qui peut tuer même une entreprise rentable), optimise les coûts de financement, et protège contre les risques financiers comme les variations de taux ou de devises.",
+    hierarchie: "La Trésorerie est rattachée à la Direction Financière (DAF / CFO). Le Directeur Trésorerie reporte au CFO. Dans les grands groupes, il existe souvent une trésorerie centrale groupe qui pilote les filiales.",
+    interlocuteurs: "CFO (Chief Financial Officer), DAF, Directeur Trésorerie, Trésorier, Cash Manager, Directeur Financement, Directeur des Risques Financiers.",
+    budget: "La trésorerie ne gère pas un budget classique mais des flux : elle pilote souvent plusieurs centaines de millions à plusieurs milliards de cash selon la taille du groupe.",
+    enjeux_quotidien: "Prévisions de cash à 13 semaines, relations avec les banques, gestion des couvertures de change, optimisation du besoin en fonds de roulement (BFR), émissions obligataires, et de plus en plus : digitalisation des paiements et compliance réglementaire."
+  },
+  cl: {
+    quoi: "La Direction Cloud / DSI gère l'infrastructure technologique de l'entreprise : les serveurs, les réseaux, les données, les applications — et depuis quelques années, leur migration vers le cloud (AWS, Azure, Google Cloud). Le RSSI/CISO s'occupe spécifiquement de la sécurité de tout cela.",
+    apporte: "Elle permet à l'entreprise de fonctionner (sans IT, tout s'arrête), d'innover plus vite grâce au cloud, de se protéger des cyberattaques et de respecter les réglementations sur les données.",
+    hierarchie: "Le CIO (Chief Information Officer / DSI) est souvent membre du COMEX ou rattaché directement au DG. Le CISO / RSSI reporte au CIO ou directement au DG selon la maturité cyber de l'entreprise.",
+    interlocuteurs: "CIO / DSI, CISO / RSSI, Directeur Cloud, Directeur Infrastructure, Directeur Architecture, DPO (Délégué à la Protection des Données), CDO (Chief Digital Officer).",
+    budget: "Le budget IT représente en moyenne 3 à 7% du chiffre d'affaires selon les secteurs. La part cloud croît rapidement : elle dépasse 30% du budget IT dans beaucoup de grandes entreprises.",
+    enjeux_quotidien: "Migrer les applications historiques vers le cloud, maîtriser les coûts cloud qui explosent (FinOps), répondre aux cyberattaques de plus en plus fréquentes, mettre en conformité avec NIS2 et DORA, et intégrer l'IA dans les systèmes existants."
+  },
+  co: {
+    quoi: "La Consolidation financière est le processus qui consiste à agréger les comptes de toutes les filiales d'un groupe pour produire des états financiers unifiés : comme si tout le groupe était une seule entreprise. C'est ce qui permet de dire 'le groupe a fait X milliards de CA'.",
+    apporte: "Elle donne aux investisseurs, actionnaires et régulateurs une vision claire et fiable de la santé financière du groupe. Sans consolidation, impossible de coter une entreprise en bourse ou d'emprunter à grande échelle.",
+    hierarchie: "La direction Consolidation est rattachée à la Direction Financière (DAF / CFO). Elle travaille en lien étroit avec le Contrôle de Gestion, la Communication Financière et les CAC (Commissaires aux Comptes / auditeurs).",
+    interlocuteurs: "DAF, CFO, Directeur Consolidation, Directeur Reporting, Directeur Comptable, Commissaires aux Comptes (PwC, Deloitte, KPMG, EY), Directeur Communication Financière.",
+    budget: "Pas de budget propre mais un rôle central : la qualité des chiffres produits conditionne la capacité du groupe à lever des fonds et sa crédibilité auprès des marchés.",
+    enjeux_quotidien: "Clôtures mensuelles et trimestrielles dans des délais très serrés (souvent 5-10 jours), intégration comptable des acquisitions, mise en conformité avec les nouvelles normes IFRS, et depuis 2024 : construction du reporting CSRD (durabilité) avec les mêmes exigences de rigueur."
+  },
+  cx: {
+    quoi: "La Direction Customer Experience (CX) / Marketing pilote tout ce que vit le client dans sa relation avec l'entreprise : de la publicité au service après-vente, en passant par le site web, le magasin, l'app mobile et le centre d'appels. L'objectif : que chaque interaction soit positive et cohérente.",
+    apporte: "Une bonne expérience client fait acheter plus, plus souvent, et fait recommander. Concrètement : elle réduit le churn (clients qui partent), augmente la valeur vie client (CLV) et diminue les coûts de service (un client satisfait appelle moins).",
+    hierarchie: "Le Directeur Marketing / CX reporte généralement au DG ou au CEO. Dans les grandes entreprises, il peut exister un CCO (Chief Customer Officer) membre du COMEX, distinct du CMO (Chief Marketing Officer) qui gère la communication et l'acquisition.",
+    interlocuteurs: "CMO (Chief Marketing Officer), CCO (Chief Customer Officer), Directeur Expérience Client, Directeur Marketing Digital, Directeur CRM, Directeur Service Client, Directeur Fidélisation.",
+    budget: "Le budget marketing représente en moyenne 5 à 15% du CA selon les secteurs. Dans les entreprises B2C (grande conso, banque, télécom), les budgets CX et fidélisation peuvent dépasser 100M€.",
+    enjeux_quotidien: "Mesurer et améliorer le NPS et le taux de satisfaction, personnaliser les communications à grande échelle grâce à la data, unifier l'expérience sur tous les canaux (omnicanal), intégrer l'IA dans le service client, et prouver le ROI des investissements CX au COMEX."
+  }
+};
+
+// ── TOPICS ────────────────────────────────────────────────────
+const TOPICS = [
   {id:'ld',label:'L&D',cls:'ld',color:'#1D9E75',audience:['Dir. Learning','Dir. L&D','Dir. Formation','Dir. Talent','DRH'],ctx:'Directeurs Learning, L&D, Formation, Talent et DRH (C-level)'},
   {id:'tr',label:'Treasury',cls:'tr',color:'#2563EB',audience:['Dir. Trésorerie','Dir. Cash Mgmt','CFO','Dir. Transfo Finance'],ctx:'Directeurs Trésorerie, Cash Management, CFO et Directeurs Transformation Finance (C-level)'},
   {id:'cl',label:'Cloud',cls:'cl',color:'#7C3AED',audience:['Dir. Cloud','CIO','CISO','RSSI'],ctx:'CIO, CISO, RSSI et Directeurs Cloud (C-level)'},
   {id:'co',label:'Consolidation',cls:'co',color:'#D85A30',audience:['Dir. Consolidation','DAF','CFO','Dir. Reporting'],ctx:'Directeurs Consolidation, DAF et CFO (C-level)'},
-  {id:'cx',label:'Customer Experience',cls:'cx',color:'#BE185D',audience:['Dir. Marketing','Dir. Expérience Client','CCO','Dir. CX'],ctx:'Directeurs Marketing, Expérience Client et CCO (C-level)'}
+  {id:'cx',label:'Customer Experience',cls:'cx',color:'#BE185D',audience:['Dir. Marketing','Dir. Expérience Client','CCO','Dir. CX'],ctx:'Directeurs Marketing, Expérience Client et CCO (C-level)'},
 ];
 
-const SECS=[
+const SECS = [
   {key:'LECTURE DU MARCHÉ',num:'01',lbl:'Lecture du marché',type:'text'},
   {key:'CAS ENTREPRISES',num:'02',lbl:'Cas entreprises',type:'cas'},
-  {key:'ANALYSE DES ÉDITEURS',num:'03',lbl:'Analyse des éditeurs',type:'text'},
+  {key:'ENJEUX BUSINESS',num:'03',lbl:'Enjeux business',type:'text'},
   {key:'TENSIONS CLÉS',num:'04',lbl:'Tensions clés',type:'tensions'},
-  {key:'ENJEUX CLIENTS',num:'05',lbl:'Enjeux clients',type:'text'},
-  {key:'QUESTIONS À POSER',num:'06',lbl:'Questions à poser',type:'questions'},
-  {key:'SYNTHÈSE ET PHRASE CLÉ',num:'07',lbl:'Synthèse',type:'synthese'}
+  {key:'QUESTIONS À POSER',num:'05',lbl:'Questions à poser',type:'questions'},
+  {key:'ANALYSE DES ÉDITEURS',num:'06',lbl:'Analyse des éditeurs',type:'text'},
 ];
 
-let state={newsletters:{},history:[]};
+let state = {newsletters:{},history:[],emaps:{},userGlossary:{}};
 
-window.addEventListener('DOMContentLoaded',async()=>{
-  genManifest();loadLocal();renderAll();
-  await loadKV();renderAll();
+// ── INIT ──────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async () => {
+  genManifest(); loadLocal(); renderAll();
+  await loadKV(); renderAll();
 });
 
 function genManifest(){
@@ -248,11 +371,26 @@ function genManifest(){
   document.getElementById('manifest-link').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}));
 }
 
-function loadLocal(){try{const s=localStorage.getItem('hv4');if(s)state=JSON.parse(s);}catch(e){}}
-function saveLocal(){try{localStorage.setItem('hv4',JSON.stringify(state));}catch(e){}}
-async function loadKV(){try{const r=await fetch('/data');if(!r.ok)return;const d=await r.json();if(d.newsletters&&Object.keys(d.newsletters).length)state.newsletters=d.newsletters;if(d.history&&d.history.length)state.history=d.history;}catch(e){}}
-async function saveKV(){try{await fetch('/data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({newsletters:state.newsletters,history:state.history})});}catch(e){}}
+function loadLocal(){try{const s=localStorage.getItem('hv5');if(s)state=JSON.parse(s);}catch(e){}}
+function saveLocal(){try{localStorage.setItem('hv5',JSON.stringify(state));}catch(e){}}
+async function loadKV(){
+  try{
+    const r=await fetch('/data');if(!r.ok)return;
+    const d=await r.json();
+    if(d.newsletters&&Object.keys(d.newsletters).length) state.newsletters=d.newsletters;
+    if(d.history&&d.history.length) state.history=d.history;
+    if(d.emaps) state.emaps=d.emaps;
+    if(d.userGlossary) state.userGlossary=d.userGlossary;
+  }catch(e){}
+}
+async function saveKV(){
+  try{
+    await fetch('/data',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({newsletters:state.newsletters,history:state.history,emaps:state.emaps,userGlossary:state.userGlossary})});
+  }catch(e){}
+}
 
+// ── GENERATION ────────────────────────────────────────────────
 async function refreshAll(){
   const btn=document.getElementById('btn-all');
   btn.disabled=true;
@@ -262,7 +400,7 @@ async function refreshAll(){
   for(let i=0;i<TOPICS.length;i++){
     setP(5+(i/TOPICS.length)*88);
     markLoad(TOPICS[i].id);
-    await genOne(TOPICS[i]);
+    await genNewsletter(TOPICS[i]);
     renderOv();
   }
   setP(100);
@@ -272,11 +410,12 @@ async function refreshAll(){
   updDate();saveLocal();await saveKV();
 }
 
-async function genOne(t){
+async function genNewsletter(t){
   try{
-    const r=await fetch('/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:PROMPT(t.label,t.ctx)}]})});
+    const r=await fetch('/ai',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:NL_PROMPT(t.label,t.ctx)}]})});
     const d=await r.json();
-    if(d.error)throw new Error(d.error.message);
+    if(d.error) throw new Error(d.error.message);
     const text=d.content?.[0]?.text||'';
     archive(t);
     state.newsletters[t.id]={text,date:today(),week:getWeek(),memo:makeMemo(text)};
@@ -288,22 +427,207 @@ async function genOne(t){
 }
 
 async function regenOne(id){
-  const t=TOPICS.find(x=>x.id===id);markLoad(id);
-  await genOne(t);renderOv();updDate();saveLocal();await saveKV();
+  const t=TOPICS.find(x=>x.id===id);
+  markLoad(id);
+  await genNewsletter(t);
+  renderOv();updDate();saveLocal();await saveKV();
 }
 
-function archive(t){
-  const p=state.newsletters[t.id];
-  if(!p||!p.text||p.text.startsWith('ERREUR'))return;
-  state.history.unshift({id:t.id,label:t.label,color:t.color,date:p.date,week:p.week,memo:p.memo||''});
-  if(state.history.length>50)state.history=state.history.slice(0,50);
+async function regenMap(id){
+  const t=TOPICS.find(x=>x.id===id);
+  const el=document.getElementById('emap-content-'+id);
+  if(el) el.innerHTML='<div class="emap-loading"><div class="spinner"></div> Actualisation de la cartographie…</div>';
+  try{
+    const existing=state.emaps[id]||null;
+    const r=await fetch('/ai',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:MAP_PROMPT(t.label,t.ctx,existing)}]})});
+    const d=await r.json();
+    if(d.error) throw new Error(d.error.message);
+    const raw=d.content?.[0]?.text||'{}';
+    const clean=raw.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(clean);
+    // MERGE: keep old categories/comparisons, add new ones
+    if(existing){
+      const oldCatNames=existing.categories.map(c=>c.name);
+      parsed.categories.forEach(nc=>{
+        if(!oldCatNames.includes(nc.name)) existing.categories.push(nc);
+        else{
+          const oc=existing.categories.find(c=>c.name===nc.name);
+          const oldActors=oc.actors.map(a=>a.name);
+          nc.actors.forEach(na=>{if(!oldActors.includes(na.name))oc.actors.push(na);});
+        }
+      });
+      const oldVs=existing.comparisons.map(c=>c.a.name+'|'+c.b.name);
+      parsed.comparisons.forEach(nc=>{
+        if(!oldVs.includes(nc.a.name+'|'+nc.b.name)) existing.comparisons.push(nc);
+      });
+      state.emaps[id]=existing;
+    } else {
+      state.emaps[id]=parsed;
+    }
+    renderEmap(id);
+    saveLocal();await saveKV();
+  }catch(e){
+    if(el) el.innerHTML=`<p style="color:var(--muted);font-size:13px;padding:1rem">Erreur : ${e.message}</p>`;
+  }
 }
 
-function makeMemo(text){
-  const lines=text.split('\n').filter(l=>l.trim().length>40&&!SECS.some(s=>l.trim().toUpperCase().startsWith(s.key)));
-  return lines.slice(0,2).map(l=>l.trim().replace(/^[-–*#]+\s*/,'')).join(' · ').substring(0,180);
+// ── GLOSSARY ──────────────────────────────────────────────────
+function getGlossary(id){
+  const base=BASE_GLOSSARY[id]||[];
+  const user=state.userGlossary[id]||[];
+  return [...base,...user];
 }
 
+function addNotion(id){
+  const term=document.getElementById('new-term-'+id).value.trim();
+  const full=document.getElementById('new-full-'+id).value.trim();
+  const def=document.getElementById('new-def-'+id).value.trim();
+  const usage=document.getElementById('new-usage-'+id).value.trim();
+  if(!term||!def) return;
+  if(!state.userGlossary[id]) state.userGlossary[id]=[];
+  state.userGlossary[id].push({term,full,def,usage});
+  document.getElementById('new-term-'+id).value='';
+  document.getElementById('new-full-'+id).value='';
+  document.getElementById('new-def-'+id).value='';
+  document.getElementById('new-usage-'+id).value='';
+  renderGlossary(id);
+  saveLocal();saveKV();
+}
+
+async function aiDefine(id){
+  const termEl=document.getElementById('new-term-'+id);
+  const term=termEl.value.trim();
+  if(!term){termEl.focus();return;}
+  const t=TOPICS.find(x=>x.id===id);
+  const btn=document.getElementById('ai-define-btn-'+id);
+  btn.disabled=true;
+  btn.textContent='Recherche…';
+  try{
+    const prompt=`Tu es expert en ${t.label}. Explique le terme "${term}" en contexte ${t.label} pour une non-experte.
+Réponds UNIQUEMENT en JSON valide sans markdown :
+{"full":"Nom complet ou vide si pas d'acronyme","def":"Définition simple en 2-3 phrases max, accessible à un non-expert, avec exemple concret si utile","usage":"Contexte d'usage : qui l'utilise, dans quel type de conversation"}`;
+    const r=await fetch('/ai',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:prompt}]})});
+    const d=await r.json();
+    const raw=d.content?.[0]?.text||'{}';
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    if(parsed.full) document.getElementById('new-full-'+id).value=parsed.full;
+    if(parsed.def)  document.getElementById('new-def-'+id).value=parsed.def;
+    if(parsed.usage) document.getElementById('new-usage-'+id).value=parsed.usage;
+  }catch(e){
+    document.getElementById('new-def-'+id).placeholder='Erreur — saisissez la définition manuellement';
+  }
+  btn.disabled=false;
+  btn.textContent='Définir avec l\'IA ✦';
+}
+
+function renderMetier(id){
+  const t=TOPICS.find(x=>x.id===id);
+  const m=BASE_METIER[id];
+  if(!m) return '';
+  const rows=[
+    {icon:'◈',label:'C\'est quoi ?',val:m.quoi},
+    {icon:'◎',label:'Ce que ça apporte à l\'entreprise',val:m.apporte},
+    {icon:'◇',label:'Position dans l\'entreprise',val:m.hierarchie},
+    {icon:'◉',label:'Les interlocuteurs clés',val:m.interlocuteurs},
+    {icon:'◐',label:'Budget & enjeux quotidiens',val:m.enjeux_quotidien},
+  ];
+  return `<div style="margin-bottom:1.5rem">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700">Comprendre le métier</div>
+      <div style="font-size:11px;padding:2px 8px;border-radius:20px;background:${t.color}22;color:${t.color};font-weight:500">Fiche de base</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px">
+      ${rows.map(r=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;border-left:3px solid ${t.color}">
+        <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:${t.color};text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">${r.label}</div>
+        <div style="font-size:13px;line-height:1.7;color:#374151">${r.val}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderGlossary(id){
+  const el=document.getElementById('gloss-content-'+id);
+  if(!el) return;
+  const t=TOPICS.find(x=>x.id===id);
+  const notions=getGlossary(id);
+  const q=(document.getElementById('gloss-search-'+id)||{}).value||'';
+  const filtered=notions.filter(n=>!q||n.term.toLowerCase().includes(q.toLowerCase())||n.def.toLowerCase().includes(q.toLowerCase()));
+  el.innerHTML=renderMetier(id)+`
+    <div class="gloss-hdr">
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700">${notions.length} notions clés</div>
+      <input class="gloss-search" id="gloss-search-${id}" placeholder="Chercher…" value="${q}" oninput="renderGlossary('${id}')">
+    </div>
+    <div class="gloss-grid">
+      ${filtered.map(n=>`<div class="gt">
+        <div class="gt-term">${n.term}</div>
+        ${n.full?`<span class="gt-acro" style="background:${t.color}22;color:${t.color}">${n.full}</span>`:''}
+        <div class="gt-def">${n.def}</div>
+        ${n.usage?`<div class="gt-usage">Contexte : ${n.usage}</div>`:''}
+      </div>`).join('')}
+    </div>
+    <div class="add-notion-form">
+      <h4>+ Ajouter une notion</h4>
+      <div class="form-row" style="align-items:center">
+        <input class="fi" id="new-term-${id}" placeholder="Terme ou acronyme (ex: ROI, IFRS 17…)">
+        <button class="btn-x" id="ai-define-btn-${id}" onclick="aiDefine('${id}')" style="white-space:nowrap;color:${t.color};border-color:${t.color}">Définir avec l'IA ✦</button>
+      </div>
+      <div class="form-row">
+        <input class="fi" id="new-full-${id}" placeholder="Nom complet (rempli par l'IA)">
+        <input class="fi" id="new-usage-${id}" placeholder="Contexte d'usage (rempli par l'IA)">
+      </div>
+      <div class="form-row full">
+        <input class="fi" id="new-def-${id}" placeholder="Définition (remplie par l'IA — modifiable)">
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:4px">
+        <button class="btn-x dark" onclick="addNotion('${id}')">Sauvegarder la notion</button>
+      </div>
+    </div>`;
+}
+
+// ── EDITOR MAP ────────────────────────────────────────────────
+function renderEmap(id){
+  const el=document.getElementById('emap-content-'+id);
+  if(!el) return;
+  const t=TOPICS.find(x=>x.id===id);
+  const map=state.emaps[id];
+  if(!map){
+    el.innerHTML=`<div style="padding:2rem;text-align:center;color:var(--muted);font-size:13px">
+      Cartographie non générée.<br>Cliquez sur <strong>Actualiser la cartographie</strong> pour la créer.
+    </div>`;
+    return;
+  }
+  const catColors=['#E6F7F0','#EEF4FF','#F3EFFE','#FEF0EA','#FDF0F6'];
+  const catTextColors=['#0F6E56','#185FA5','#5B21B6','#9A3412','#9D174D'];
+  const catsHtml=(map.categories||[]).map((cat,i)=>`
+    <div class="ecat" style="background:${catColors[i%5]}">
+      <div class="ecat-lbl" style="color:${catTextColors[i%5]}">${cat.name}</div>
+      <div style="font-size:11px;color:${catTextColors[i%5]};opacity:.8;margin-bottom:8px">${cat.role||''}</div>
+      <div class="ecat-items">
+        ${(cat.actors||[]).map(a=>`<div class="eitem">
+          <div class="eitem-name">${a.name}</div>
+          <div class="eitem-desc">${a.desc}</div>
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  const vsHtml=(map.comparisons||[]).map(c=>`
+    <div class="vs-row">
+      <div class="vs-a"><div class="vs-name" style="color:${t.color}">${c.a.name}</div><div style="font-size:12px;color:var(--muted)">${c.a.position}</div></div>
+      <div class="vs-pill">vs</div>
+      <div class="vs-b"><div class="vs-name" style="color:var(--text)">${c.b.name}</div><div style="font-size:12px;color:var(--muted)">${c.b.position}</div></div>
+    </div>
+    <div style="font-size:12px;color:var(--muted);padding:.25rem 1rem .75rem;margin-top:-4px">${c.diff}</div>`).join('');
+
+  el.innerHTML=`
+    <div class="emap-wrap">
+      <div class="emap-cats">${catsHtml}</div>
+      ${vsHtml?`<div class="emap-vs"><div class="emap-vs-title">Comparaisons directes</div>${vsHtml}</div>`:''}
+    </div>`;
+}
+
+// ── PARSE & RENDER ────────────────────────────────────────────
 function parseSections(text){
   const res=[];let cur=null;
   for(const line of text.split('\n')){
@@ -316,24 +640,13 @@ function parseSections(text){
   return res.filter(s=>s.body.trim().length>5).map(s=>({...s,body:s.body.trim()}));
 }
 
-function renderCardText(s,color){
-  const bodyHtml=s.body.split('\n\n').filter(p=>p.trim().length>0).map(p=>{
-    const t=p.trim();
-    // detect stat-like lines (number + text)
-    const statM=t.match(/^(\d[\d\s%,.]*[%€$MKB]*)\s+(.+)$/);
-    if(statM)return `<div class="stat-pill"><span class="stat-num" style="color:${color}">${statM[1]}</span><span class="stat-lbl">${statM[2]}</span></div>`;
-    return `<p>${t}</p>`;
-  }).join('');
-  return `<div class="dc-body">${bodyHtml}</div>`;
-}
-
-function renderCardCas(s){
+function renderCas(s){
   const blocks=s.body.split(/\n---\n/);
-  const casHtml=blocks.map(b=>{
+  const html=blocks.map(b=>{
     const lines=b.trim().split('\n').filter(l=>l.trim());
     if(!lines.length)return '';
     const name=lines[0];
-    const lesson=lines.find(l=>l.toLowerCase().startsWith('leçon:'));
+    const lesson=lines.find(l=>l.toLowerCase().startsWith('leçon'));
     const body=lines.filter(l=>l!==name&&l!==lesson).join(' ');
     return `<div class="cas-item">
       <div class="cas-co">${name}</div>
@@ -341,44 +654,37 @@ function renderCardCas(s){
       ${lesson?`<div class="cas-lesson">${lesson}</div>`:''}
     </div>`;
   }).join('');
-  return `<div class="cas-grid">${casHtml}</div>`;
+  return `<div class="cas-grid">${html}</div>`;
 }
 
-function renderCardTensions(s,color){
-  const lines=s.body.split('\n').filter(l=>l.trim()&&l.includes('::'));
-  if(!lines.length){
-    return `<div class="dc-body">${s.body.split('\n\n').map(p=>`<p>${p.trim()}</p>`).join('')}</div>`;
-  }
+function renderTensions(s,color){
+  const lines=s.body.split('\n').filter(l=>l.includes('::'));
+  if(!lines.length) return `<div class="dc-body">${s.body.split('\n\n').map(p=>`<p>${p.trim()}</p>`).join('')}</div>`;
   const html=lines.map(l=>{
     const [vs,expl]=l.split('::');
-    return `<div class="tension-item">
-      <span class="tension-vs" style="color:${color}">${vs.trim()}</span>
-      <span class="tension-txt">${expl?expl.trim():''}</span>
-    </div>`;
+    return `<div class="ti"><span class="ti-vs" style="color:${color}">${vs.trim()}</span><span class="ti-txt">${expl?expl.trim():''}</span></div>`;
   }).join('');
   return `<div class="tension-list">${html}</div>`;
 }
 
-function renderCardQuestions(s){
-  const lines=s.body.split('\n').filter(l=>l.trim()&&/^\d\./.test(l.trim()));
-  if(!lines.length){
-    return `<div class="dc-body">${s.body.split('\n\n').map(p=>`<p>${p.trim()}</p>`).join('')}</div>`;
-  }
-  const html=lines.map((l,i)=>`<div class="q-item"><span class="q-num">0${i+1}</span><span class="q-txt">${l.replace(/^\d\.\s*/,'')}</span></div>`).join('');
+function renderQuestions(s){
+  const lines=s.body.split('\n').filter(l=>/^\d\./.test(l.trim()));
+  if(!lines.length) return `<div class="dc-body">${s.body.split('\n\n').map(p=>`<p>${p.trim()}</p>`).join('')}</div>`;
+  const html=lines.map((l,i)=>`<div class="qi"><span class="qi-n">0${i+1}</span><span class="qi-t">${l.replace(/^\d\.\s*/,'')}</span></div>`).join('');
   return `<div class="q-list">${html}</div>`;
 }
 
-function renderSynthese(s,color){
-  const lines=s.body.split('\n').filter(l=>l.trim());
-  const phraseIdx=lines.findIndex(l=>l.trim().toUpperCase().startsWith('PHRASE:'));
-  const phrase=phraseIdx>=0?lines[phraseIdx].replace(/^PHRASE:\s*/i,'').trim():lines[lines.length-1];
-  const synth=phraseIdx>=0?lines.slice(0,phraseIdx).join(' '):lines.slice(0,-1).join(' ');
-  return `<div class="punchline" style="background:${color}">
-    <div class="pl-lbl" style="color:#fff">Synthèse</div>
-    ${synth?`<div class="pl-synth" style="color:#fff">${synth}</div>`:''}
-    <div class="pl-lbl" style="color:#fff;margin-top:.5rem">Phrase à placer en conversation</div>
-    <div class="pl-txt" style="color:#fff">${phrase}</div>
-  </div>`;
+function renderText(s){
+  const html=s.body.split('\n\n').filter(p=>p.trim()).map(p=>`<p>${p.trim()}</p>`).join('');
+  return `<div class="dc-body">${html}</div>`;
+}
+
+function extractPunchline(text){
+  const lines=text.split('\n');
+  const idx=lines.findIndex(l=>l.trim().toUpperCase().startsWith('PHRASE CLÉ'));
+  if(idx<0) return '';
+  const after=lines.slice(idx+1).filter(l=>l.trim().length>10);
+  return after[0]?after[0].trim().replace(/^["«»]+/,'').replace(/["«»]+$/,''):'';
 }
 
 function renderAll(){renderOv();TOPICS.forEach(t=>renderPanel(t.id));renderHistory();updDate();}
@@ -389,7 +695,7 @@ function renderOv(){
     const ok=n&&n.text&&!n.text.startsWith('ERREUR');
     const badge=ok?`<span class="badge b-ok">${n.week||'ok'}</span>`:`<span class="badge b-no">—</span>`;
     const aud=t.audience.slice(0,2).join(', ')+(t.audience.length>2?'…':'');
-    const snip=ok?(n.memo?n.memo.substring(0,75)+'…':'—'):'Pas encore généré';
+    const snip=ok?(n.memo?n.memo.substring(0,80)+'…':'—'):'Pas encore généré';
     return `<div class="ov-card ${t.cls}" onclick="switchTo('${t.id}')">
       <div class="ov-top"><div class="ov-name" style="color:${t.color}">${t.label}</div>${badge}</div>
       <div class="ov-aud">${aud}</div>
@@ -400,7 +706,7 @@ function renderOv(){
 
 function markLoad(id){
   const el=document.getElementById('view-'+id);
-  if(el)el.innerHTML='<div class="nl-loading"><div class="spinner"></div><p>Génération en cours…</p></div>';
+  if(el) el.innerHTML='<div class="nl-loading"><div class="spinner"></div><p>Génération en cours…</p></div>';
 }
 
 function renderPanel(id){
@@ -410,7 +716,7 @@ function renderPanel(id){
   const tags=t.audience.map(a=>`<span class="nl-tag">${a}</span>`).join('');
 
   const hdr=`<div class="nl-hdr">
-    <div class="nl-eyebrow"><span class="nl-dot" style="background:${t.color}"></span><span class="nl-eye-txt">${t.label} · ${n?n.week||n.date:'Nouvelle édition'}</span></div>
+    <div class="nl-ey"><span class="nl-dot" style="background:${t.color}"></span><span class="nl-eytxt">${t.label} · ${n?n.week||n.date:'Nouvelle édition'}</span></div>
     <div class="nl-title">${t.label}</div>
     <div class="nl-sub">Ce qu'il faut savoir cette semaine pour parler avec des ${t.audience[0]}s.</div>
     <div class="nl-meta">
@@ -422,29 +728,72 @@ function renderPanel(id){
     </div>
   </div>`;
 
-  if(!n){el.innerHTML=hdr+`<div class="nl-empty"><strong>Pas encore de newsletter</strong>Cliquez sur "Générer" pour créer l'édition.</div>`;return;}
+  // SUBNAV
+  const subnav=`<div class="subnav" id="subnav-${id}">
+    <button class="snb active" style="background:${t.color}" data-tp="${id}" data-tab="nl" onclick="switchTab('${id}','nl')">Newsletter</button>
+    <button class="snb" data-tp="${id}" data-tab="gloss" onclick="switchTab('${id}','gloss')">Répertoire des notions</button>
+    <button class="snb" data-tp="${id}" data-tab="emap" onclick="switchTab('${id}','emap')">Cartographie éditeurs</button>
+  </div>`;
 
-  const secs=parseSections(n.text);
-  const synthSec=secs.find(s=>s.key==='SYNTHÈSE ET PHRASE CLÉ');
-  const otherSecs=secs.filter(s=>s.key!=='SYNTHÈSE ET PHRASE CLÉ');
+  // NL PANEL
+  let nlContent='';
+  if(!n){
+    nlContent=`<div class="nl-empty"><strong>Pas encore de newsletter</strong>Cliquez sur "Générer" pour créer l'édition.</div>`;
+  } else {
+    const secs=parseSections(n.text);
+    const punch=extractPunchline(n.text);
+    const cards=secs.map(s=>{
+      let body;
+      if(s.type==='cas') body=renderCas(s);
+      else if(s.type==='tensions') body=renderTensions(s,t.color);
+      else if(s.type==='questions') body=renderQuestions(s);
+      else body=renderText(s);
+      return `<div class="dc">
+        <div class="dc-head" style="border-left:3px solid ${t.color}">
+          <span class="dc-num">${s.num}</span><span class="dc-lbl">${s.lbl}</span>
+        </div>${body}</div>`;
+    }).join('');
+    const punchHtml=punch?`<div class="punchline" style="background:${t.color}">
+      <div class="pl-lbl">Phrase à placer en conversation</div>
+      <div class="pl-txt">${punch}</div>
+    </div>`:'';
+    nlContent=`<div class="digest">${cards}</div>${punchHtml}`;
+  }
 
-  const cards=otherSecs.map(s=>{
-    let bodyHtml;
-    if(s.type==='cas') bodyHtml=renderCardCas(s);
-    else if(s.type==='tensions') bodyHtml=renderCardTensions(s,t.color);
-    else if(s.type==='questions') bodyHtml=renderCardQuestions(s);
-    else bodyHtml=renderCardText(s,t.color);
-    return `<div class="dc">
-      <div class="dc-head" style="border-left:3px solid ${t.color}">
-        <span class="dc-num">${s.num}</span>
-        <span class="dc-lbl">${s.lbl}</span>
-      </div>
-      ${bodyHtml}
-    </div>`;
-  }).join('');
+  // GLOSS PANEL
+  const glossContent=`<div id="gloss-content-${id}"></div>`;
 
-  const synth=synthSec?renderSynthese(synthSec,t.color):'';
-  el.innerHTML=hdr+`<div class="digest">${cards}</div>${synth}`;
+  // EMAP PANEL
+  const emapContent=`
+    <div class="emap-hdr">
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted)">Cartographie des éditeurs — ${t.label}</div>
+      <button class="btn-x dark" onclick="regenMap('${id}')">Actualiser la cartographie ↻</button>
+    </div>
+    <div id="emap-content-${id}"></div>`;
+
+  el.innerHTML=hdr+subnav+
+    `<div class="tpanel active" id="tp-${id}-nl">${nlContent}</div>`+
+    `<div class="tpanel" id="tp-${id}-gloss">${glossContent}</div>`+
+    `<div class="tpanel" id="tp-${id}-emap">${emapContent}</div>`;
+
+  renderGlossary(id);
+  renderEmap(id);
+}
+
+function switchTab(topicId, tab){
+  document.querySelectorAll(`#subnav-${topicId} .snb`).forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll(`#view-${topicId} .tpanel`).forEach(p=>p.classList.remove('active'));
+  const btn=document.querySelector(`#subnav-${topicId} .snb[data-tab="${tab}"]`);
+  if(btn){
+    btn.classList.add('active');
+    const t=TOPICS.find(x=>x.id===topicId);
+    btn.style.background=btn.dataset.tab==='nl'?t.color:'';
+    btn.style.color=btn.dataset.tab==='nl'?'#fff':'';
+    btn.style.borderColor=btn.dataset.tab==='nl'?'transparent':'';
+  }
+  // reset other tabs colors
+  document.querySelectorAll(`#subnav-${topicId} .snb:not(.active)`).forEach(b=>{b.style.background='';b.style.color='';b.style.borderColor='';});
+  document.getElementById(`tp-${topicId}-${tab}`).classList.add('active');
 }
 
 function renderHistory(){
@@ -454,8 +803,8 @@ function renderHistory(){
   const g={};h.forEach(x=>{const k=x.week||x.date;if(!g[k])g[k]=[];g[k].push(x);});
   el.innerHTML=Object.entries(g).map(([w,items])=>`
     <div class="h-week">
-      <div class="h-wlbl">${w}</div>
-      ${items.map(x=>`<div class="h-item"><div class="h-top"><span class="h-dot" style="background:${x.color}"></span><span class="h-lbl">${x.label}</span><span class="h-date">${x.date}</span></div><div class="h-memo">${x.memo||'—'}</div></div>`).join('')}
+      <div class="hw-lbl">${w}</div>
+      ${items.map(x=>`<div class="hi"><div class="hi-top"><span class="hi-dot" style="background:${x.color}"></span><span class="hi-lbl">${x.label}</span><span class="hi-date">${x.date}</span></div><div class="hi-memo">${x.memo||'—'}</div></div>`).join('')}
     </div>`).join('');
 }
 
@@ -470,11 +819,21 @@ document.getElementById('main-nav').addEventListener('click',e=>{
   const b=e.target.closest('.nb');if(!b)return;switchTo(b.dataset.view);
 });
 
+function archive(t){
+  const p=state.newsletters[t.id];
+  if(!p||!p.text||p.text.startsWith('ERREUR'))return;
+  state.history.unshift({id:t.id,label:t.label,color:t.color,date:p.date,week:p.week,memo:p.memo||''});
+  if(state.history.length>50)state.history=state.history.slice(0,50);
+}
+function makeMemo(text){
+  const lines=text.split('\n').filter(l=>l.trim().length>40&&!SECS.some(s=>l.trim().toUpperCase().startsWith(s.key)));
+  return lines.slice(0,2).map(l=>l.trim().replace(/^[-–*#]+\s*/,'')).join(' · ').substring(0,180);
+}
 function copyTxt(id){const n=state.newsletters[id];if(n)navigator.clipboard.writeText(n.text);}
 function setP(p){document.getElementById('pf').style.width=p+'%';}
 function today(){return new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
 function getWeek(){const n=new Date(),m=new Date(n);m.setDate(n.getDate()-n.getDay()+1);return 'Sem. '+m.toLocaleDateString('fr-FR',{day:'2-digit',month:'long'});}
-function updDate(){const d=Object.values(state.newsletters).map(n=>n.date).filter(Boolean);document.getElementById('last-update').textContent=d.length?'Mis à jour : '+d.sort().reverse()[0]:'Jamais actualisé';}
+function updDate(){const d=Object.values(state.newsletters).map(n=>n.date).filter(Boolean);document.getElementById('last-upd').textContent=d.length?'Mis à jour : '+d.sort().reverse()[0]:'Jamais actualisé';}
 </script>
 </body>
 </html>
