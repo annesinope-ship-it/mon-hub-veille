@@ -9,805 +9,369 @@
 <meta name="apple-mobile-web-app-title" content="Hub Veille">
 <link rel="manifest" id="manifest-link">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --ld:     #1D9E75;
-    --ld-bg:  #E8F8F2;
-    --tr:     #2563EB;
-    --tr-bg:  #EEF4FF;
-    --cl:     #7C3AED;
-    --cl-bg:  #F3EFFE;
-    --co:     #D85A30;
-    --co-bg:  #FEF0EA;
-    --cx:     #BE185D;
-    --cx-bg:  #FDF0F6;
-    --bg:     #F7F6F3;
-    --surface:#FFFFFF;
-    --border: #E5E3DC;
-    --text:   #1A1917;
-    --muted:  #6B6860;
-    --radius: 12px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
+:root{--ld:#1D9E75;--tr:#2563EB;--cl:#7C3AED;--co:#D85A30;--cx:#BE185D;--bg:#F5F3EE;--surface:#FFFFFF;--border:#E2DFD7;--text:#1C1917;--muted:#78716C}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Serif 4',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.logo{font-family:'Playfair Display',serif;font-size:22px;letter-spacing:-.5px}
+.logo em{font-style:italic;font-weight:400}
+.header-right{display:flex;align-items:center;gap:14px}
+#last-update{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted)}
+.btn-refresh{background:var(--text);color:#fff;border:none;padding:8px 20px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:7px;transition:opacity .15s}
+.btn-refresh:hover{opacity:.82}
+.btn-refresh:disabled{opacity:.4;cursor:not-allowed}
+.progress-wrap{height:2px;background:var(--border);display:none}
+.progress-bar{height:100%;background:var(--text);transition:width .5s;width:0%}
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2.5rem;display:flex;overflow-x:auto}
+nav::-webkit-scrollbar{display:none}
+.nav-btn{padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:7px}
+.nav-btn:hover{color:var(--text)}
+.nav-btn.active{color:var(--text);font-weight:500;border-bottom-color:var(--text)}
+.nav-pip{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+main{max-width:820px;margin:0 auto;padding:3rem 2rem}
+.panel{display:none}.panel.active{display:block}
 
-  /* ── HEADER ── */
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 60px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 20px;
-    letter-spacing: -0.3px;
-  }
-  .logo span { color: var(--ld); }
-  .header-right { display: flex; align-items: center; gap: 12px; }
-  #last-update { font-size: 12px; color: var(--muted); }
-  .btn-refresh {
-    background: var(--text);
-    color: #fff;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: opacity 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .btn-refresh:hover { opacity: 0.82; }
-  .btn-refresh:disabled { opacity: 0.4; cursor: not-allowed; }
+/* OVERVIEW */
+.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:2.5rem}
+.ov-card{background:var(--surface);padding:1.25rem 1.5rem;cursor:pointer;transition:background .15s;border-top:3px solid transparent}
+.ov-card:hover{background:#FAFAF8}
+.ov-card.ld{border-top-color:var(--ld)}.ov-card.tr{border-top-color:var(--tr)}.ov-card.cl{border-top-color:var(--cl)}.ov-card.co{border-top-color:var(--co)}.ov-card.cx{border-top-color:var(--cx)}
+.ov-subject{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px;display:flex;justify-content:space-between;align-items:center}
+.ov-name{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:4px}
+.ov-aud{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);margin-bottom:8px}
+.ov-snippet{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);line-height:1.5}
+.pill{font-family:'DM Sans',sans-serif;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500}
+.p-ok{background:#E6F7F0;color:#0F6E56}.p-no{background:#F1EFE8;color:#78716C}.p-load{background:#FEF3C7;color:#92400E}
+.howto{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.5rem 2rem;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--muted);line-height:1.75}
+.howto strong{color:var(--text);font-weight:500}
 
-  /* ── PROGRESS ── */
-  .progress-wrap {
-    height: 3px;
-    background: var(--border);
-    display: none;
-  }
-  .progress-bar {
-    height: 100%;
-    background: var(--ld);
-    transition: width 0.5s;
-    width: 0%;
-  }
+/* MASTHEAD */
+.nl-masthead{margin-bottom:2.5rem;padding-bottom:2rem;border-bottom:2px solid var(--text)}
+.nl-eyebrow{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:.75rem;display:flex;align-items:center;gap:8px}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%}
+.nl-headline{font-family:'Playfair Display',serif;font-size:36px;line-height:1.15;letter-spacing:-.5px;margin-bottom:.75rem}
+.nl-deck{font-size:17px;font-weight:300;line-height:1.65;color:#57534E;font-style:italic;margin-bottom:1.25rem}
+.nl-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.nl-tags{display:flex;flex-wrap:wrap;gap:5px}
+.nl-tag{font-family:'DM Sans',sans-serif;font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--border);color:var(--muted)}
+.nl-actions{display:flex;gap:8px}
+.btn-s{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:6px 14px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);transition:background .15s}
+.btn-s:hover{background:var(--bg)}
+.btn-s.dark{background:var(--text);color:#fff;border-color:transparent}
+.btn-s.dark:hover{opacity:.82;background:var(--text)}
 
-  /* ── NAV ── */
-  nav {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-  }
-  nav::-webkit-scrollbar { display: none; }
-  .nav-btn {
-    padding: 14px 16px;
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--muted);
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    cursor: pointer;
-    white-space: nowrap;
-    font-family: 'DM Sans', sans-serif;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .nav-btn:hover { color: var(--text); }
-  .nav-btn.active { color: var(--text); font-weight: 500; border-bottom-color: var(--text); }
-  .nav-dot { width: 7px; height: 7px; border-radius: 50%; }
+/* SECTIONS */
+.nl-section{padding:2rem 0;border-bottom:1px solid var(--border)}
+.nl-section:last-child{border-bottom:none}
+.sec-header{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.25rem}
+.sec-num{font-family:'Playfair Display',serif;font-size:13px;color:var(--muted);font-style:italic;flex-shrink:0}
+.sec-label{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.sec-body{font-size:16px;line-height:1.9;color:var(--text)}
+.sec-body p{margin-bottom:1em}.sec-body p:last-child{margin-bottom:0}
 
-  /* ── LAYOUT ── */
-  main { max-width: 1100px; margin: 0 auto; padding: 2rem; }
-  .panel { display: none; }
-  .panel.active { display: block; }
+/* PUNCHLINE */
+.pull-quote{border-left:3px solid var(--text);margin:1.5rem 0;padding:.75rem 0 .75rem 1.5rem}
+.pull-quote p{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;line-height:1.55}
+.punchline{background:var(--text);color:#fff;border-radius:10px;padding:1.75rem 2rem;margin-top:2.5rem}
+.punchline-lbl{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;opacity:.5;margin-bottom:.75rem}
+.punchline-txt{font-family:'Playfair Display',serif;font-size:20px;font-style:italic;line-height:1.45}
 
-  /* ── OVERVIEW GRID ── */
-  .overview-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 14px;
-    margin-bottom: 2rem;
-  }
-  .topic-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem;
-    cursor: pointer;
-    transition: box-shadow 0.15s, border-color 0.15s;
-    position: relative;
-    overflow: hidden;
-  }
-  .topic-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: #ccc; }
-  .topic-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-  }
-  .topic-card.ld::before  { background: var(--ld); }
-  .topic-card.tr::before  { background: var(--tr); }
-  .topic-card.cl::before  { background: var(--cl); }
-  .topic-card.co::before  { background: var(--co); }
-  .topic-card.cx::before  { background: var(--cx); }
-  .tc-label {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .tc-status {
-    font-size: 10px;
-    padding: 2px 7px;
-    border-radius: 20px;
-    font-weight: 500;
-    text-transform: none;
-    letter-spacing: 0;
-    margin-left: auto;
-  }
-  .status-ok  { background: #E8F8F2; color: #0F6E56; }
-  .status-no  { background: #F1EFE8; color: #6B6860; }
-  .status-loading { background: #FAEEDA; color: #854F0B; }
-  .tc-audience { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-  .tc-snippet  { font-size: 12px; color: var(--muted); line-height: 1.55; }
+/* STATES */
+.nl-empty{padding:4rem 0;text-align:center;font-family:'DM Sans',sans-serif;color:var(--muted);font-size:14px}
+.nl-empty strong{display:block;color:var(--text);font-weight:500;font-size:15px;margin-bottom:6px}
+.nl-loading{padding:4rem 0;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--text);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nl-loading p{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted)}
 
-  /* ── HOW TO ── */
-  .howto {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-  }
-  .howto h3 { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
-  .howto p  { font-size: 13px; color: var(--muted); line-height: 1.7; }
+/* HISTORY */
+.hist-title{font-family:'Playfair Display',serif;font-size:28px;margin-bottom:2rem}
+.hist-week{margin-bottom:2rem}
+.hw-lbl{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.hi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:8px}
+.hi-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.hi-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.hi-lbl{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500}
+.hi-date{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);margin-left:auto}
+.hi-memo{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);line-height:1.65}
 
-  /* ── NEWSLETTER PANEL ── */
-  .nl-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
-    gap: 12px;
-  }
-  .nl-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 26px;
-    letter-spacing: -0.3px;
-    margin-bottom: 4px;
-  }
-  .nl-meta { font-size: 12px; color: var(--muted); }
-  .audience-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
-  .atag {
-    font-size: 11px;
-    padding: 3px 9px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    color: var(--muted);
-  }
-  .nl-actions { display: flex; gap: 8px; flex-shrink: 0; }
-  .btn-action {
-    padding: 7px 14px;
-    font-size: 12px;
-    font-weight: 500;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    transition: background 0.15s;
-    white-space: nowrap;
-  }
-  .btn-action:hover { background: var(--bg); }
-  .btn-gen {
-    background: var(--text);
-    color: #fff;
-    border-color: transparent;
-  }
-  .btn-gen:hover { opacity: 0.82; background: var(--text); }
-
-  /* ── NEWSLETTER CONTENT ── */
-  .nl-body {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .nl-empty {
-    padding: 3rem 2rem;
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
-  }
-  .nl-content { padding: 2rem; }
-  .nl-section {
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .nl-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-  .nl-section-label {
-    font-size: 10px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .nl-section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-  .nl-section-body {
-    font-size: 14px;
-    line-height: 1.8;
-    color: var(--text);
-    white-space: pre-wrap;
-  }
-  .nl-raw {
-    font-size: 14px;
-    line-height: 1.8;
-    color: var(--text);
-    white-space: pre-wrap;
-    padding: 2rem;
-  }
-
-  /* ── LOADING STATE ── */
-  .nl-loading {
-    padding: 3rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-  }
-  .spinner {
-    width: 28px; height: 28px;
-    border: 2px solid var(--border);
-    border-top-color: var(--text);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .nl-loading p { font-size: 13px; color: var(--muted); }
-
-  /* ── HISTORY ── */
-  .history-week { margin-bottom: 2rem; }
-  .history-week-label {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-    margin-bottom: 10px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--border);
-  }
-  .history-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1rem 1.25rem;
-    margin-bottom: 8px;
-  }
-  .history-item-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-  .h-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .h-label { font-size: 13px; font-weight: 500; }
-  .h-date  { font-size: 12px; color: var(--muted); margin-left: auto; }
-  .h-memo  { font-size: 13px; color: var(--muted); line-height: 1.65; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 640px) {
-    main { padding: 1rem; }
-    header { padding: 0 1rem; }
-    nav { padding: 0 1rem; }
-    .nl-header { flex-direction: column; }
-    .nl-title { font-size: 20px; }
-  }
+@media(max-width:640px){main{padding:2rem 1.25rem}header{padding:0 1.25rem}nav{padding:0 1rem}.nl-headline{font-size:26px}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Hub<span>.</span>Veille</div>
+  <div class="logo">Hub<em>.</em>Veille</div>
   <div class="header-right">
     <span id="last-update">Jamais actualisé</span>
-    <button class="btn-refresh" id="btn-refresh-all" onclick="refreshAll()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+    <button class="btn-refresh" id="btn-refresh" onclick="refreshAll()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
       Tout actualiser
     </button>
   </div>
 </header>
 
-<div class="progress-wrap" id="progress-wrap">
-  <div class="progress-bar" id="progress-bar"></div>
-</div>
+<div class="progress-wrap" id="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
 
 <nav id="main-nav">
   <button class="nav-btn active" data-view="overview">Vue d'ensemble</button>
-  <button class="nav-btn" data-view="ld">
-    <span class="nav-dot" style="background:var(--ld)"></span>L&D
-  </button>
-  <button class="nav-btn" data-view="tr">
-    <span class="nav-dot" style="background:var(--tr)"></span>Treasury
-  </button>
-  <button class="nav-btn" data-view="cl">
-    <span class="nav-dot" style="background:var(--cl)"></span>Cloud
-  </button>
-  <button class="nav-btn" data-view="co">
-    <span class="nav-dot" style="background:var(--co)"></span>Consolidation
-  </button>
-  <button class="nav-btn" data-view="cx">
-    <span class="nav-dot" style="background:var(--cx)"></span>Customer Experience
-  </button>
+  <button class="nav-btn" data-view="ld"><span class="nav-pip" style="background:var(--ld)"></span>L&D</button>
+  <button class="nav-btn" data-view="tr"><span class="nav-pip" style="background:var(--tr)"></span>Treasury</button>
+  <button class="nav-btn" data-view="cl"><span class="nav-pip" style="background:var(--cl)"></span>Cloud</button>
+  <button class="nav-btn" data-view="co"><span class="nav-pip" style="background:var(--co)"></span>Consolidation</button>
+  <button class="nav-btn" data-view="cx"><span class="nav-pip" style="background:var(--cx)"></span>Customer Experience</button>
   <button class="nav-btn" data-view="history">Historique</button>
 </nav>
 
 <main>
-
-  <!-- OVERVIEW -->
   <div class="panel active" id="view-overview">
     <div class="overview-grid" id="overview-grid"></div>
-    <div class="howto">
-      <h3>Comment utiliser ce hub</h3>
-      <p>Chaque semaine, cliquez sur <strong>Tout actualiser</strong> pour générer les 5 newsletters en une fois via l'IA. Chaque édition est calibrée pour vous permettre de tenir une conversation de qualité avec des C-levels. L'historique conserve un pense-bête de chaque édition précédente.</p>
-    </div>
+    <div class="howto">Chaque semaine, cliquez sur <strong>Tout actualiser</strong> pour générer les 5 newsletters via l'IA. Chaque édition vous permet de tenir une conversation de qualité avec des C-levels sur leur domaine.</div>
   </div>
-
-  <!-- PANELS SUJETS -->
   <div class="panel" id="view-ld"></div>
   <div class="panel" id="view-tr"></div>
   <div class="panel" id="view-cl"></div>
   <div class="panel" id="view-co"></div>
   <div class="panel" id="view-cx"></div>
-
-  <!-- HISTORIQUE -->
   <div class="panel" id="view-history">
-    <div style="font-family:'DM Serif Display',serif;font-size:26px;letter-spacing:-0.3px;margin-bottom:1.5rem">Historique</div>
-    <div id="history-container">
-      <div style="color:var(--muted);font-size:14px;padding:2rem 0">L'historique se constitue à chaque nouvelle actualisation.</div>
-    </div>
+    <div class="hist-title">Historique</div>
+    <div id="hist-wrap"><p style="font-family:'DM Sans',sans-serif;font-size:14px;color:var(--muted)">L'historique se constitue à chaque actualisation.</p></div>
   </div>
-
 </main>
 
 <script>
+const PROMPT = (label, ctx) => `Tu es expert senior en ${label}. Tu écris une newsletter de veille hebdomadaire en français pour un non-expert qui organise des événements et dîners avec des ${ctx}.
+
+OBJECTIF : lui permettre de comprendre le sujet en 10 minutes, d'en parler avec des dirigeants sans être expert, de poser des questions intelligentes.
+
+Génère exactement ces 7 sections avec leurs titres exacts seuls sur une ligne, entourés de lignes vides :
+
+LECTURE DU MARCHÉ
+Explique comment fonctionne ce marché aujourd'hui, les grands blocs d'acteurs, les tensions principales. Style narratif et fluide, 2-3 paragraphes.
+
+CAS ENTREPRISES
+3 exemples d'entreprises connues en storytelling : situation → problème → décision → leçon business. Pas de bullets secs.
+
+ANALYSE DES ÉDITEURS
+Cartographie en 3-4 familles d'acteurs. Comparaisons directes de 2-3 paires (A vs B) : positionnement, usage réel, stratégie. Dynamique du marché. Lecture côté clients. Style analytique accessible.
+
+TENSIONS CLÉS
+3 tensions majeures du marché : A vs B, pourquoi c'est un problème aujourd'hui, impact concret.
+
+ENJEUX CLIENTS
+3-4 problèmes majeurs des directions métier, leurs arbitrages, leurs frustrations réelles. Très concret.
+
+QUESTIONS À POSER
+5 questions du simple au stratégique, utilisables en conversation réelle avec ces décideurs.
+
+SYNTHÈSE ET PHRASE CLÉ
+3-4 lignes de synthèse puis une seule ligne commençant par PHRASE: contenant la punchline mémorable à placer en conversation.
+
+Style global : intelligent mais accessible, pas académique, exemples concrets, narratif. Commence directement par LECTURE DU MARCHÉ.`;
+
 const TOPICS = [
-  {
-    id: 'ld', label: 'L&D', color: '#1D9E75', cls: 'ld',
-    audience: ['Dir. Learning','Dir. L&D','Dir. Formation','Dir. Talent','DRH'],
-    prompt: `Tu es expert senior en Learning & Development. Génère une newsletter de veille hebdomadaire en français, calibrée pour permettre à un non-expert d'avoir une conversation de qualité avec des Directeurs Learning, L&D, Formation, Talent et DRH (C-level).
-
-Contexte : j'organise des événements et anime des dîners avec ces décideurs. Je veux comprendre leurs enjeux réels et tenir une conversation intelligente.
-
-Génère exactement 4 sections avec ces titres exacts sur leur propre ligne :
-TENDANCE DU MOMENT
-CAS ENTREPRISE
-À PLACER EN DÎNER
-CONCEPT DE LA SEMAINE
-
-Pour chaque section : 2-4 paragraphes courts, fluides, sans bullet points. Ton expert vulgarisé, terrain, direct. Maximum 380 mots au total.`
-  },
-  {
-    id: 'tr', label: 'Treasury', color: '#2563EB', cls: 'tr',
-    audience: ['Dir. Trésorerie','Dir. Cash Mgmt','CFO','Dir. Transfo Finance'],
-    prompt: `Tu es expert senior en trésorerie d'entreprise et marchés financiers. Génère une newsletter de veille hebdomadaire en français, calibrée pour permettre à un non-expert d'avoir une conversation de qualité avec des Directeurs Trésorerie, CFO et Directeurs Cash Management (C-level).
-
-Contexte : j'organise des événements et anime des dîners avec ces décideurs. Je veux comprendre leurs enjeux réels et tenir une conversation intelligente.
-
-Génère exactement 4 sections avec ces titres exacts sur leur propre ligne :
-TENDANCE DU MOMENT
-CAS ENTREPRISE
-À PLACER EN DÎNER
-CONCEPT DE LA SEMAINE
-
-Pour chaque section : 2-4 paragraphes courts, fluides, sans bullet points. Ton expert vulgarisé, terrain, direct. Maximum 380 mots au total.`
-  },
-  {
-    id: 'cl', label: 'Cloud', color: '#7C3AED', cls: 'cl',
-    audience: ['Dir. Cloud','CIO','CISO','RSSI'],
-    prompt: `Tu es expert senior en stratégie cloud et cybersécurité. Génère une newsletter de veille hebdomadaire en français, calibrée pour permettre à un non-expert d'avoir une conversation de qualité avec des CIO, CISO, RSSI et Directeurs Cloud (C-level).
-
-Contexte : j'organise des événements et anime des dîners avec ces décideurs. Je veux comprendre leurs enjeux réels — à la fois côté cloud et côté sécurité.
-
-Génère exactement 4 sections avec ces titres exacts sur leur propre ligne :
-TENDANCE DU MOMENT
-CAS ENTREPRISE
-À PLACER EN DÎNER
-CONCEPT DE LA SEMAINE
-
-Pour chaque section : 2-4 paragraphes courts, fluides, sans bullet points. Ton expert vulgarisé, terrain, direct. Maximum 380 mots au total.`
-  },
-  {
-    id: 'co', label: 'Consolidation', color: '#D85A30', cls: 'co',
-    audience: ['Dir. Consolidation','DAF','CFO','Dir. Reporting'],
-    prompt: `Tu es expert senior en consolidation financière et reporting groupe. Génère une newsletter de veille hebdomadaire en français, calibrée pour permettre à un non-expert d'avoir une conversation de qualité avec des Directeurs Consolidation, DAF et CFO (C-level).
-
-Contexte : j'organise des événements et anime des dîners avec ces décideurs. Je veux comprendre leurs enjeux réels : clôtures, IFRS, CSRD, outils de reporting.
-
-Génère exactement 4 sections avec ces titres exacts sur leur propre ligne :
-TENDANCE DU MOMENT
-CAS ENTREPRISE
-À PLACER EN DÎNER
-CONCEPT DE LA SEMAINE
-
-Pour chaque section : 2-4 paragraphes courts, fluides, sans bullet points. Ton expert vulgarisé, terrain, direct. Maximum 380 mots au total.`
-  },
-  {
-    id: 'cx', label: 'Customer Experience', color: '#BE185D', cls: 'cx',
-    audience: ['Dir. Marketing','Dir. Expérience Client','CCO','Dir. CX'],
-    prompt: `Tu es expert senior en customer experience et stratégie client. Génère une newsletter de veille hebdomadaire en français, calibrée pour permettre à un non-expert d'avoir une conversation de qualité avec des Directeurs Marketing, Expérience Client et CCO (C-level).
-
-Contexte : j'organise des événements et anime des dîners avec ces décideurs. Je veux comprendre leurs enjeux réels : personnalisation, IA dans le CX, fidélisation, mesure de l'expérience.
-
-Génère exactement 4 sections avec ces titres exacts sur leur propre ligne :
-TENDANCE DU MOMENT
-CAS ENTREPRISE
-À PLACER EN DÎNER
-CONCEPT DE LA SEMAINE
-
-Pour chaque section : 2-4 paragraphes courts, fluides, sans bullet points. Ton expert vulgarisé, terrain, direct. Maximum 380 mots au total.`
-  }
+  {id:'ld',label:'L&D',cls:'ld',color:'#1D9E75',audience:['Dir. Learning','Dir. L&D','Dir. Formation','Dir. Talent','DRH'],ctx:'Directeurs Learning, L&D, Formation, Talent et DRH (C-level)'},
+  {id:'tr',label:'Treasury',cls:'tr',color:'#2563EB',audience:['Dir. Trésorerie','Dir. Cash Mgmt','CFO','Dir. Transfo Finance'],ctx:'Directeurs Trésorerie, Cash Management, CFO et Directeurs Transformation Finance (C-level)'},
+  {id:'cl',label:'Cloud',cls:'cl',color:'#7C3AED',audience:['Dir. Cloud','CIO','CISO','RSSI'],ctx:'CIO, CISO, RSSI et Directeurs Cloud (C-level)'},
+  {id:'co',label:'Consolidation',cls:'co',color:'#D85A30',audience:['Dir. Consolidation','DAF','CFO','Dir. Reporting'],ctx:'Directeurs Consolidation, DAF et CFO (C-level)'},
+  {id:'cx',label:'Customer Experience',cls:'cx',color:'#BE185D',audience:['Dir. Marketing','Dir. Expérience Client','CCO','Dir. CX'],ctx:'Directeurs Marketing, Expérience Client et CCO (C-level)'}
 ];
 
-const COLOR = { ld:'#1D9E75', tr:'#2563EB', cl:'#7C3AED', co:'#D85A30', cx:'#BE185D' };
-let state = { newsletters:{}, history:[] };
+const SECS = [
+  {key:'LECTURE DU MARCHÉ',num:'01',lbl:'Lecture du marché'},
+  {key:'CAS ENTREPRISES',num:'02',lbl:'Cas entreprises'},
+  {key:'ANALYSE DES ÉDITEURS',num:'03',lbl:'Analyse des éditeurs'},
+  {key:'TENSIONS CLÉS',num:'04',lbl:'Tensions clés'},
+  {key:'ENJEUX CLIENTS',num:'05',lbl:'Enjeux clients'},
+  {key:'QUESTIONS À POSER',num:'06',lbl:'Questions à poser'},
+  {key:'SYNTHÈSE ET PHRASE CLÉ',num:'07',lbl:'Synthèse & phrase clé'}
+];
 
-// ── INIT ──
+let state = {newsletters:{},history:[]};
+
 window.addEventListener('DOMContentLoaded', async () => {
-  generateManifest();
-  loadFromLocalStorage();
-  renderAll();
-  await loadFromKV();
-  renderAll();
+  genManifest(); loadLocal(); renderAll();
+  await loadKV(); renderAll();
 });
 
-function generateManifest() {
-  const icon = generateIcon();
-  const manifest = {
-    name: 'Hub Veille Stratégique',
-    short_name: 'Hub Veille',
-    start_url: '/',
-    display: 'standalone',
-    background_color: '#F7F6F3',
-    theme_color: '#1A1917',
-    icons: [{ src: icon, sizes: '192x192', type: 'image/png' }]
-  };
-  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-  document.getElementById('manifest-link').href = URL.createObjectURL(blob);
+function genManifest() {
+  const c=document.createElement('canvas');c.width=192;c.height=192;
+  const x=c.getContext('2d');
+  x.fillStyle='#1C1917';x.roundRect(0,0,192,192,28);x.fill();
+  x.fillStyle='#fff';x.font='bold 80px serif';x.fillText('H',50,130);
+  x.fillStyle='#1D9E75';x.fillRect(120,90,5,50);
+  const m={name:'Hub Veille Stratégique',short_name:'Hub Veille',start_url:'/',display:'standalone',background_color:'#F5F3EE',theme_color:'#1C1917',icons:[{src:c.toDataURL(),sizes:'192x192',type:'image/png'}]};
+  document.getElementById('manifest-link').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}));
 }
 
-function generateIcon() {
-  const c = document.createElement('canvas');
-  c.width = 192; c.height = 192;
-  const ctx = c.getContext('2d');
-  ctx.fillStyle = '#1A1917';
-  ctx.roundRect(0, 0, 192, 192, 32);
-  ctx.fill();
-  ctx.fillStyle = '#1D9E75';
-  ctx.fillRect(24, 24, 6, 144);
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 72px serif';
-  ctx.fillText('H', 52, 130);
-  return c.toDataURL('image/png');
-}
+function loadLocal(){try{const s=localStorage.getItem('hub_v3');if(s)state=JSON.parse(s);}catch(e){}}
+function saveLocal(){try{localStorage.setItem('hub_v3',JSON.stringify(state));}catch(e){}}
+async function loadKV(){try{const r=await fetch('/data');if(!r.ok)return;const d=await r.json();if(d.newsletters&&Object.keys(d.newsletters).length)state.newsletters=d.newsletters;if(d.history&&d.history.length)state.history=d.history;}catch(e){}}
+async function saveKV(){try{await fetch('/data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({newsletters:state.newsletters,history:state.history})});}catch(e){}}
 
-// ── STORAGE ──
-function loadFromLocalStorage() {
-  try {
-    const s = localStorage.getItem('hub_veille_v1');
-    if (s) state = JSON.parse(s);
-  } catch(e) {}
-}
-
-function saveToLocalStorage() {
-  try { localStorage.setItem('hub_veille_v1', JSON.stringify(state)); } catch(e) {}
-}
-
-async function loadFromKV() {
-  try {
-    const res = await fetch('/data');
-    if (!res.ok) return;
-    const data = await res.json();
-    if (data.newsletters && Object.keys(data.newsletters).length) state.newsletters = data.newsletters;
-    if (data.history && data.history.length) state.history = data.history;
-  } catch(e) {}
-}
-
-async function saveToKV() {
-  try {
-    await fetch('/data', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ newsletters: state.newsletters, history: state.history })
-    });
-  } catch(e) {}
-}
-
-// ── GENERATE ──
-async function refreshAll() {
-  const btn = document.getElementById('btn-refresh-all');
-  btn.disabled = true;
-  btn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite"></div> Génération...';
-  document.getElementById('progress-wrap').style.display = 'block';
-  setProgress(2);
-
-  for (let i = 0; i < TOPICS.length; i++) {
-    const t = TOPICS[i];
-    setProgress(5 + (i / TOPICS.length) * 88);
-    setTopicLoading(t.id);
-    await generateOne(t);
+async function refreshAll(){
+  const btn=document.getElementById('btn-refresh');
+  btn.disabled=true;
+  btn.innerHTML='<div style="width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite"></div> Génération…';
+  document.getElementById('progress-wrap').style.display='block';
+  setP(2);
+  for(let i=0;i<TOPICS.length;i++){
+    setP(5+(i/TOPICS.length)*88);
+    markLoad(TOPICS[i].id);
+    await genOne(TOPICS[i]);
     renderOverview();
   }
-
-  setProgress(100);
-  setTimeout(() => {
-    document.getElementById('progress-wrap').style.display = 'none';
-    setProgress(0);
-  }, 600);
-
-  btn.disabled = false;
-  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg> Tout actualiser';
-  updateLastUpdate();
-  saveToLocalStorage();
-  await saveToKV();
+  setP(100);
+  setTimeout(()=>{document.getElementById('progress-wrap').style.display='none';setP(0);},600);
+  btn.disabled=false;
+  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Tout actualiser';
+  updateDate();saveLocal();await saveKV();
 }
 
-async function generateOne(topic) {
-  try {
-    const res = await fetch('/ai', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: topic.prompt }] })
-    });
-    const data = await res.json();
-    const text = data.content?.[0]?.text || '';
-    archiveIfExists(topic);
-    state.newsletters[topic.id] = {
-      text,
-      date: todayStr(),
-      week: weekStr(),
-      memo: extractMemo(text)
-    };
+async function genOne(topic){
+  try{
+    const r=await fetch('/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:PROMPT(topic.label,topic.ctx)}]})});
+    const d=await r.json();
+    if(d.error)throw new Error(d.error.message);
+    const text=d.content?.[0]?.text||'';
+    archive(topic);
+    state.newsletters[topic.id]={text,date:today(),week:week(),memo:memo(text)};
     renderPanel(topic.id);
-  } catch(e) {
-    state.newsletters[topic.id] = { text: 'Erreur : ' + e.message, date: todayStr(), week: weekStr(), memo: '' };
+  }catch(e){
+    state.newsletters[topic.id]={text:'ERREUR\n\n'+e.message,date:today(),week:week(),memo:''};
     renderPanel(topic.id);
   }
 }
 
-async function generateSingle(id) {
-  const topic = TOPICS.find(t => t.id === id);
-  setTopicLoading(id);
-  await generateOne(topic);
-  renderOverview();
-  updateLastUpdate();
-  saveToLocalStorage();
-  await saveToKV();
+async function regenOne(id){
+  const t=TOPICS.find(x=>x.id===id);
+  markLoad(id);
+  await genOne(t);
+  renderOverview();updateDate();saveLocal();await saveKV();
 }
 
-function archiveIfExists(topic) {
-  const prev = state.newsletters[topic.id];
-  if (!prev || !prev.text) return;
-  if (!state.history) state.history = [];
-  state.history.unshift({
-    id: topic.id, label: topic.label,
-    color: topic.color, date: prev.date,
-    week: prev.week, memo: prev.memo || ''
-  });
-  if (state.history.length > 50) state.history = state.history.slice(0, 50);
+function archive(topic){
+  const p=state.newsletters[topic.id];
+  if(!p||!p.text||p.text.startsWith('ERREUR'))return;
+  state.history.unshift({id:topic.id,label:topic.label,color:topic.color,date:p.date,week:p.week,memo:p.memo||''});
+  if(state.history.length>50)state.history=state.history.slice(0,50);
 }
 
-function extractMemo(text) {
-  const lines = text.split('\n').filter(l => l.trim().length > 40);
-  return lines.slice(0, 3).map(l => l.trim().replace(/^[#*\-–—]+\s*/, '').substring(0, 100)).join('\n');
+function memo(text){
+  const lines=text.split('\n').filter(l=>l.trim().length>40&&!SECS.some(s=>l.trim().toUpperCase().startsWith(s.key)));
+  return lines.slice(0,3).map(l=>l.trim().replace(/^[-–—*#]+\s*/,'')).join(' · ').substring(0,200);
 }
 
-// ── RENDER ──
-function renderAll() {
-  renderOverview();
-  TOPICS.forEach(t => renderPanel(t.id));
-  renderHistory();
-  updateLastUpdate();
+function parse(text){
+  const res=[];let cur=null;
+  for(const line of text.split('\n')){
+    const t=line.trim();
+    const s=SECS.find(x=>t.toUpperCase().startsWith(x.key));
+    if(s){if(cur)res.push(cur);cur={...s,body:''};}
+    else if(cur)cur.body+=line+'\n';
+  }
+  if(cur)res.push(cur);
+  return res.filter(s=>s.body.trim().length>10).map(s=>({...s,body:s.body.trim()}));
 }
 
-function renderOverview() {
-  const grid = document.getElementById('overview-grid');
-  grid.innerHTML = TOPICS.map(t => {
-    const n = state.newsletters[t.id];
-    const ok = n && n.text && !n.text.startsWith('Erreur');
-    const snippet = ok ? (n.memo ? n.memo.split('\n')[0] : n.text.substring(0, 100) + '...') : 'Pas encore généré';
-    const statusHtml = ok
-      ? `<span class="tc-status status-ok">${n.week || n.date}</span>`
-      : `<span class="tc-status status-no">—</span>`;
-    const audienceShort = t.audience.slice(0, 2).join(', ') + (t.audience.length > 2 ? '...' : '');
-    return `<div class="topic-card ${t.cls}" onclick="switchTo('${t.id}')">
-      <div class="tc-label" style="color:${t.color}">${t.label} ${statusHtml}</div>
-      <div class="tc-audience">${audienceShort}</div>
-      <div class="tc-snippet">${snippet}</div>
+function renderAll(){renderOverview();TOPICS.forEach(t=>renderPanel(t.id));renderHistory();updateDate();}
+
+function renderOverview(){
+  document.getElementById('overview-grid').innerHTML=TOPICS.map(t=>{
+    const n=state.newsletters[t.id];
+    const ok=n&&n.text&&!n.text.startsWith('ERREUR');
+    const badge=ok?`<span class="pill p-ok">${n.week||'ok'}</span>`:`<span class="pill p-no">—</span>`;
+    const aud=t.audience.slice(0,2).join(', ')+(t.audience.length>2?'…':'');
+    const snip=ok?(n.memo?n.memo.substring(0,80)+'…':'—'):'Pas encore généré';
+    return `<div class="ov-card ${t.cls}" onclick="switchTo('${t.id}')">
+      <div class="ov-subject">${t.label.toUpperCase()} ${badge}</div>
+      <div class="ov-name">${t.label}</div>
+      <div class="ov-aud">${aud}</div>
+      <div class="ov-snippet">${snip}</div>
     </div>`;
   }).join('');
 }
 
-function setTopicLoading(id) {
-  const el = document.getElementById('view-' + id);
-  if (!el) return;
-  const topic = TOPICS.find(t => t.id === id);
-  el.innerHTML = buildPanelShell(topic, `
-    <div class="nl-loading">
-      <div class="spinner"></div>
-      <p>Génération en cours...</p>
-    </div>`);
-  const card = document.querySelector(`.topic-card.${topic.cls} .tc-status`);
-  if (card) { card.className = 'tc-status status-loading'; card.textContent = '...'; }
+function markLoad(id){
+  const el=document.getElementById('view-'+id);
+  if(el)el.innerHTML='<div class="nl-loading"><div class="spinner"></div><p>Génération en cours…</p></div>';
 }
 
-function renderPanel(id) {
-  const el = document.getElementById('view-' + id);
-  if (!el) return;
-  const topic = TOPICS.find(t => t.id === id);
-  const n = state.newsletters[id];
-  if (!n) {
-    el.innerHTML = buildPanelShell(topic, `<div class="nl-empty">Pas encore de newsletter.<br>Cliquez sur <strong>Tout actualiser</strong> ou sur le bouton ci-dessus.</div>`);
-    return;
-  }
-  const sections = parseNewsletter(n.text);
-  let bodyHtml;
-  if (sections.length >= 2) {
-    bodyHtml = sections.map(s => `
-      <div class="nl-section">
-        <div class="nl-section-label">${s.title}</div>
-        <div class="nl-section-body">${s.body}</div>
-      </div>`).join('');
-    bodyHtml = `<div class="nl-content">${bodyHtml}</div>`;
-  } else {
-    bodyHtml = `<div class="nl-raw">${n.text}</div>`;
-  }
-  el.innerHTML = buildPanelShell(topic, bodyHtml, n);
-}
-
-function buildPanelShell(topic, bodyHtml, n) {
-  const pills = topic.audience.map(a => `<span class="atag">${a}</span>`).join('');
-  const week = n ? (n.week || n.date) : '';
-  return `
-    <div class="nl-header">
-      <div>
-        <div class="nl-title" style="color:${topic.color}">${topic.label}</div>
-        <div class="nl-meta">${week ? 'Édition du ' + week : 'Aucune édition générée'}</div>
-        <div class="audience-tags">${pills}</div>
-      </div>
+function renderPanel(id){
+  const el=document.getElementById('view-'+id);if(!el)return;
+  const t=TOPICS.find(x=>x.id===id);
+  const n=state.newsletters[id];
+  const tags=t.audience.map(a=>`<span class="nl-tag">${a}</span>`).join('');
+  const mast=`<div class="nl-masthead">
+    <div class="nl-eyebrow"><span class="eyebrow-dot" style="background:${t.color}"></span>${t.label.toUpperCase()} &nbsp;·&nbsp; ${n?n.week||n.date:'Nouvelle édition'}</div>
+    <div class="nl-headline">Veille stratégique<br>${t.label}</div>
+    <div class="nl-deck">Ce qu'il faut savoir cette semaine pour échanger avec des ${t.audience[0]}s et leurs pairs.</div>
+    <div class="nl-meta">
+      <div class="nl-tags">${tags}</div>
       <div class="nl-actions">
-        ${n ? `<button class="btn-action" onclick="copyNewsletter('${topic.id}')">Copier</button>` : ''}
-        <button class="btn-action btn-gen" onclick="generateSingle('${topic.id}')">Générer ↻</button>
+        ${n&&!n.text.startsWith('ERREUR')?`<button class="btn-s" onclick="copyTxt('${id}')">Copier</button>`:''}
+        <button class="btn-s dark" onclick="regenOne('${id}')">Générer ↻</button>
       </div>
     </div>
-    <div class="nl-body">${bodyHtml}</div>`;
+  </div>`;
+
+  if(!n){el.innerHTML=mast+`<div class="nl-empty"><strong>Pas encore de newsletter</strong>Cliquez sur "Générer" pour créer l'édition de cette semaine.</div>`;return;}
+
+  const secs=parse(n.text);
+  const synthSec=secs.find(s=>s.key==='SYNTHÈSE ET PHRASE CLÉ');
+  const otherSecs=secs.filter(s=>s.key!=='SYNTHÈSE ET PHRASE CLÉ');
+
+  const secsHtml=otherSecs.map(s=>{
+    const bodyHtml=s.body.split('\n\n').map(p=>p.trim()).filter(p=>p.length>0).map(p=>`<p>${p}</p>`).join('');
+    return `<div class="nl-section"><div class="sec-header"><span class="sec-num">${s.num}</span><span class="sec-label">${s.lbl}</span></div><div class="sec-body">${bodyHtml}</div></div>`;
+  }).join('');
+
+  let endHtml='';
+  if(synthSec){
+    const lines=synthSec.body.split('\n').filter(l=>l.trim().length>0);
+    const phraseIdx=lines.findIndex(l=>l.trim().toUpperCase().startsWith('PHRASE:'));
+    const phrase=phraseIdx>=0?lines[phraseIdx].replace(/^PHRASE:\s*/i,''):lines[lines.length-1];
+    const synth=phraseIdx>=0?lines.slice(0,phraseIdx).join(' '):lines.slice(0,-1).join(' ');
+    endHtml=`${synth?`<div class="pull-quote"><p>${synth}</p></div>`:''}
+    <div class="punchline"><div class="punchline-lbl">Phrase à placer en conversation</div><div class="punchline-txt">${phrase}</div></div>`;
+  }
+
+  el.innerHTML=mast+`<div>${secsHtml}</div>${endHtml}`;
 }
 
-function parseNewsletter(text) {
-  const LABELS = ['TENDANCE DU MOMENT','CAS ENTREPRISE','À PLACER EN DÎNER','CONCEPT DE LA SEMAINE'];
-  const sections = [];
-  let current = null;
-  for (const line of text.split('\n')) {
-    const trimmed = line.trim();
-    const match = LABELS.find(l => trimmed.toUpperCase().includes(l));
-    if (match) {
-      if (current) sections.push(current);
-      current = { title: match, body: '' };
-    } else if (current) {
-      current.body += (current.body ? '\n' : '') + line;
-    }
-  }
-  if (current) sections.push(current);
-  return sections.map(s => ({ ...s, body: s.body.trim() })).filter(s => s.body.length > 10);
-}
-
-function renderHistory() {
-  const el = document.getElementById('history-container');
-  const hist = state.history || [];
-  if (!hist.length) {
-    el.innerHTML = '<div style="color:var(--muted);font-size:14px;padding:2rem 0">L\'historique se constitue à chaque nouvelle actualisation.</div>';
-    return;
-  }
-  const grouped = {};
-  hist.forEach(h => {
-    const k = h.week || h.date;
-    if (!grouped[k]) grouped[k] = [];
-    grouped[k].push(h);
-  });
-  el.innerHTML = Object.entries(grouped).map(([week, items]) => `
-    <div class="history-week">
-      <div class="history-week-label">${week}</div>
-      ${items.map(h => `
-        <div class="history-item">
-          <div class="history-item-header">
-            <span class="h-dot" style="background:${h.color}"></span>
-            <span class="h-label">${h.label}</span>
-            <span class="h-date">${h.date}</span>
-          </div>
-          <div class="h-memo">${h.memo || '—'}</div>
-        </div>`).join('')}
+function renderHistory(){
+  const el=document.getElementById('hist-wrap');
+  const h=state.history||[];
+  if(!h.length){el.innerHTML=`<p style="font-family:'DM Sans',sans-serif;font-size:14px;color:var(--muted)">L'historique se constitue à chaque actualisation.</p>`;return;}
+  const g={};
+  h.forEach(x=>{const k=x.week||x.date;if(!g[k])g[k]=[];g[k].push(x);});
+  el.innerHTML=Object.entries(g).map(([week,items])=>`
+    <div class="hist-week">
+      <div class="hw-lbl">${week}</div>
+      ${items.map(x=>`<div class="hi"><div class="hi-top"><span class="hi-dot" style="background:${x.color}"></span><span class="hi-lbl">${x.label}</span><span class="hi-date">${x.date}</span></div><div class="hi-memo">${x.memo||'—'}</div></div>`).join('')}
     </div>`).join('');
 }
 
-// ── UTILS ──
-function switchTo(id) {
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  const btn = document.querySelector(`.nav-btn[data-view="${id}"]`);
-  if (btn) btn.classList.add('active');
-  const panel = document.getElementById('view-' + id);
-  if (panel) panel.classList.add('active');
-  window.scrollTo(0, 0);
+function switchTo(id){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const btn=document.querySelector(`.nav-btn[data-view="${id}"]`);
+  if(btn)btn.classList.add('active');
+  document.getElementById('view-'+id).classList.add('active');
+  window.scrollTo(0,0);
 }
 
-document.getElementById('main-nav').addEventListener('click', e => {
-  const btn = e.target.closest('.nav-btn');
-  if (!btn) return;
-  switchTo(btn.dataset.view);
+document.getElementById('main-nav').addEventListener('click',e=>{
+  const b=e.target.closest('.nav-btn');if(!b)return;switchTo(b.dataset.view);
 });
 
-function copyNewsletter(id) {
-  const n = state.newsletters[id];
-  if (n) navigator.clipboard.writeText(n.text);
-}
-
-function setProgress(pct) {
-  document.getElementById('progress-bar').style.width = pct + '%';
-}
-
-function todayStr() {
-  return new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
-}
-
-function weekStr() {
-  const now = new Date();
-  const mon = new Date(now);
-  mon.setDate(now.getDate() - now.getDay() + 1);
-  return 'Sem. ' + mon.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long' });
-}
-
-function updateLastUpdate() {
-  const dates = Object.values(state.newsletters).map(n => n.date).filter(Boolean);
-  const el = document.getElementById('last-update');
-  el.textContent = dates.length ? 'Mis à jour : ' + dates.sort().reverse()[0] : 'Jamais actualisé';
-}
+function copyTxt(id){const n=state.newsletters[id];if(n)navigator.clipboard.writeText(n.text);}
+function setP(p){document.getElementById('progress-bar').style.width=p+'%';}
+function today(){return new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}
+function week(){const n=new Date(),m=new Date(n);m.setDate(n.getDate()-n.getDay()+1);return 'Sem. '+m.toLocaleDateString('fr-FR',{day:'2-digit',month:'long'});}
+function updateDate(){const d=Object.values(state.newsletters).map(n=>n.date).filter(Boolean);document.getElementById('last-update').textContent=d.length?'Mis à jour : '+d.sort().reverse()[0]:'Jamais actualisé';}
 </script>
 </body>
 </html>
