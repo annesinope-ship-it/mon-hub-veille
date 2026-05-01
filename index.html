@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hub Veille Stratégique</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hub Veille">
+<link rel="manifest" id="manifest-link">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ld:     #1D9E75;
+    --ld-bg:  #E8F8F2;
+    --tr:     #2563EB;
+    --tr-bg:  #EEF4FF;
+    --cl:     #7C3AED;
+    --cl-bg:  #F3EFFE;
+    --co:     #D85A30;
+    --co-bg:  #FEF0EA;
+    --cx:     #BE185D;
+    --cx-bg:  #FDF0F6;
+    --bg:     #F7F6F3;
+    --surface:#FFFFFF;
+    --border: #E5E3DC;
+    --text:   #1A1917;
+    --muted:  #6B6860;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    letter-spacing: -0.3px;
+  }
+  .logo span { color: var(--ld); }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  #last-update { font-size: 12px; color: var(--muted); }
+  .btn-refresh {
+    background: var(--text);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: opacity 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-refresh:hover { opacity: 0.82; }
+  .btn-refresh:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    height: 3px;
+    background: var(--border);
+    display: none;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--ld);
+    transition: width 0.5s;
+    width: 0%;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    padding: 14px 16px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--text); font-weight: 500; border-bottom-color: var(--text); }
+  .nav-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* ── LAYOUT ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── OVERVIEW GRID ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 2rem;
+  }
+  .topic-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: box-shadow 0.15s, border-color 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .topic-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: #ccc; }
+  .topic-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .topic-card.ld::before  { background: var(--ld); }
+  .topic-card.tr::before  { background: var(--tr); }
+  .topic-card.cl::before  { background: var(--cl); }
+  .topic-card.co::before  { background: var(--co); }
+  .topic-card.cx::before  { background: var(--cx); }
+  .tc-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tc-status {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-left: auto;
+  }
+  .status-ok  { background: #E8F8F2; color: #0F6E56; }
+  .status-no  { background: #F1EFE8; color: #6B6860; }
+  .status-loading { background: #FAEEDA; color: #854F0B; }
+  .tc-audience { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .tc-snippet  { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+  /* ── HOW TO ── */
+  .howto {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+  }
+  .howto h3 { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .howto p  { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  /* ── NEWSLETTER PANEL ── */
+  .nl-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 12px;
+  }
+  .nl-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  .nl-meta { font-size: 12px; color: var(--muted); }
+  .audience-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .atag {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .nl-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .btn-action {
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .btn-action:hover { background: var(--bg); }
+  .btn-gen {
+    background: var(--text);
+    color: #fff;
+    border-color: transparent;
+  }
+  .btn-gen:hover { opacity: 0.82; background: var(--text); }
+
+  /* ── NEWSLETTER CONTENT ── */
+  .nl-body {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .nl-empty {
+    padding: 3rem 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .nl-content { padding: 2rem; }
+  .nl-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .nl-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .nl-section-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nl-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .nl-section-body {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+  .nl-raw {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text);
+    white-space: pre-wrap;
+    padding: 2rem;
+  }
+
+  /* ── LOADING STATE ── */
+  .nl-loading {
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .spinner {
+    width: 28px; height: 28px;
+    border: 2px solid var(--border);
+    border-top-color: var(--text);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .nl-loading p { font-size: 13px; color: var(--muted); }
+
+  /* ── HISTORY ── */
+  .history-week { margin-bottom: 2rem; }
+  .history-week-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .history-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 8px;
+  }
+  .history-item-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .h-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .h-label { font-size: 13px; font-weight: 500; }
+  .h-date  { font-size: 12px; color: var(--muted); margin-left: auto; }
+  .h-memo  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    main { padding: 1rem; }
+    header { padding: 0 1rem; }
+    nav { padding: 0 1rem; }
+    .nl-header { flex-direction: column; }
+    .nl-title { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Hub<span>.</span>Veille</div>
+  <div class="header-right">
+    <span id="last-update">Jamais actualisé</span>
+    <button class="btn-refresh" id="btn-refresh-all" onclick="refreshAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+      Tout actualiser
+    </button>
+  </div>
+</header>
+
+<div class="progress-wrap" id="progress-wrap">
+  <div class="progress-bar" id="progress-bar"></div>
+</div>
+
+<nav id="main-nav">
+  <button class="nav-btn active" data-view="overview">Vue d'ensemble</button>
+  <button class="nav-btn" data-view="ld">
+    <span class="nav-dot" style="background:var(--ld)"></span>L&D
+  </button>
+  <button class="nav-btn" data-view="tr">
+    <span class="nav-dot" style="background:var(--tr)"></span>Treasury
+  </button>
+  <button class="nav-btn" data-view="cl">
+    <span class="nav-dot" style="background:var(--cl)"></span>Cloud
+  </button>
+  <button class="nav-btn" data-view="co">
+    <span class="nav-dot" style="background:var(--co)"></span>Consolidation
+  </button>
+  <button class="nav-btn" data-view="cx">
+    <span class="nav-dot" style="background:var(--cx)"></span>Customer Experience
+  </button>
+  <button class="nav-btn" data-view="history">Historique</button>
+</nav>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <div class="panel active" id="view-overview">
+    <div class="overview-grid" id="overview-grid"></div>
+    <div class="howto">
+      <h3>Comment utiliser ce hub</h3>
+      <p>Chaque semaine, cliquez sur <strong>Tout actualiser</strong> pour générer les 5 newsletters en une fois via l'IA. Chaque édition est calibrée pour vous permettre de tenir une conversation de qualité avec des C-levels. L'historique conserve un pense-bête de chaque édition précédente.</p>
+    </div>
+  </div>
+
+  <!-- PANELS SUJETS -->
+  <div class="panel" id="view-ld"></div>
+  <div class="panel" id="view-tr"></div>
+  <div class="panel" id="view-cl"></div>
+  <div class="panel" id="view-co"></div>
+  <div class="panel" id="view-cx"></div>
+
+  <!-- HISTORIQUE -->
+  <div class="panel" id="view-history">
+    <div style="font-family:'DM Serif Display',serif;font-size:26px;letter-spacing:-0.3px;margin-bottom:1.5rem">Historique</div>
+    <div id="history-container">
+      <div style="color:var(--muted);font-size:14px;padding:2rem 0">L'historique se constitue à chaque nouvelle actualisation.</div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const TOPICS = [
+  {
+    id: 'ld', label: 'L&D', color: '#1D9E75', cls: 'ld',
+    audience: ['Dir. Learning','Dir. L&D','Dir. Formation','Dir. Talent','DRH'],
+    prompt: `Tu es expert senior en Learning & Development. Génère une newsletter de veille hebdomadaire en français, calibrée pour permettre à un non-expert d'avoir une conversation de qualité avec des Directeurs Learning, L&D, Formation, Talent et DRH (C-level).
+
+Contexte : j'organise des événements et anime des dîners avec ces décideurs. Je veux comprendre leurs enjeux réels et tenir une conversation intelligente.
+
+Génère exactement 4 sections avec ces titres exacts sur leur propre ligne :
+TENDANCE DU MOMENT
+CAS ENTREPRISE
+À PLACER EN DÎNER
+CONCEPT DE LA SEMAINE
+
+Pour chaque section : 2-4 paragraphes courts, fluides, sans bullet points. Ton expert vulgarisé, terrain, direct. Maximum 380 mots au total.`
+  },
+  {
+    id: 'tr', label: 'Treasury', color: '#2563EB', cls: 'tr',
+    audience: ['Dir. Trésorerie','Dir. Cash Mgmt','CFO','Dir. Transfo Finance'],
+    prompt: `Tu es expert senior en trésorerie d'entreprise et marchés financiers. Génère une newsletter de veille hebdomadaire en français, calibrée pour permettre à un non-expert d'avoir une conversation de qualité avec des Directeurs Trésorerie, CFO et Directeurs Cash Management (C-level).
+
+Contexte : j'organise des événements et anime des dîners avec ces décideurs. Je veux comprendre leurs enjeux réels et tenir une conversation intelligente.
+
+Génère exactement 4 sections avec ces titres exacts sur leur propre ligne :
+TENDANCE DU MOMENT
+CAS ENTREPRISE
+À PLACER EN DÎNER
+CONCEPT DE LA SEMAINE
+
+Pour chaque section : 2-4 paragraphes courts, fluides, sans bullet points. Ton expert vulgarisé, terrain, direct. Maximum 380 mots au total.`
+  },
+  {
+    id: 'cl', label: 'Cloud', color: '#7C3AED', cls: 'cl',
+    audience: ['Dir. Cloud','CIO','CISO','RSSI'],
+    prompt: `Tu es expert senior en stratégie cloud et cybersécurité. Génère une newsletter de veille hebdomadaire en français, calibrée pour permettre à un non-expert d'avoir une conversation de qualité avec des CIO, CISO, RSSI et Directeurs Cloud (C-level).
+
+Contexte : j'organise des événements et anime des dîners avec ces décideurs. Je veux comprendre leurs enjeux réels — à la fois côté cloud et côté sécurité.
+
+Génère exactement 4 sections avec ces titres exacts sur leur propre ligne :
+TENDANCE DU MOMENT
+CAS ENTREPRISE
+À PLACER EN DÎNER
+CONCEPT DE LA SEMAINE
+
+Pour chaque section : 2-4 paragraphes courts, fluides, sans bullet points. Ton expert vulgarisé, terrain, direct. Maximum 380 mots au total.`
+  },
+  {
+    id: 'co', label: 'Consolidation', color: '#D85A30', cls: 'co',
+    audience: ['Dir. Consolidation','DAF','CFO','Dir. Reporting'],
+    prompt: `Tu es expert senior en consolidation financière et reporting groupe. Génère une newsletter de veille hebdomadaire en français, calibrée pour permettre à un non-expert d'avoir une conversation de qualité avec des Directeurs Consolidation, DAF et CFO (C-level).
+
+Contexte : j'organise des événements et anime des dîners avec ces décideurs. Je veux comprendre leurs enjeux réels : clôtures, IFRS, CSRD, outils de reporting.
+
+Génère exactement 4 sections avec ces titres exacts sur leur propre ligne :
+TENDANCE DU MOMENT
+CAS ENTREPRISE
+À PLACER EN DÎNER
+CONCEPT DE LA SEMAINE
+
+Pour chaque section : 2-4 paragraphes courts, fluides, sans bullet points. Ton expert vulgarisé, terrain, direct. Maximum 380 mots au total.`
+  },
+  {
+    id: 'cx', label: 'Customer Experience', color: '#BE185D', cls: 'cx',
+    audience: ['Dir. Marketing','Dir. Expérience Client','CCO','Dir. CX'],
+    prompt: `Tu es expert senior en customer experience et stratégie client. Génère une newsletter de veille hebdomadaire en français, calibrée pour permettre à un non-expert d'avoir une conversation de qualité avec des Directeurs Marketing, Expérience Client et CCO (C-level).
+
+Contexte : j'organise des événements et anime des dîners avec ces décideurs. Je veux comprendre leurs enjeux réels : personnalisation, IA dans le CX, fidélisation, mesure de l'expérience.
+
+Génère exactement 4 sections avec ces titres exacts sur leur propre ligne :
+TENDANCE DU MOMENT
+CAS ENTREPRISE
+À PLACER EN DÎNER
+CONCEPT DE LA SEMAINE
+
+Pour chaque section : 2-4 paragraphes courts, fluides, sans bullet points. Ton expert vulgarisé, terrain, direct. Maximum 380 mots au total.`
+  }
+];
+
+const COLOR = { ld:'#1D9E75', tr:'#2563EB', cl:'#7C3AED', co:'#D85A30', cx:'#BE185D' };
+let state = { newsletters:{}, history:[] };
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', async () => {
+  generateManifest();
+  loadFromLocalStorage();
+  renderAll();
+  await loadFromKV();
+  renderAll();
+});
+
+function generateManifest() {
+  const icon = generateIcon();
+  const manifest = {
+    name: 'Hub Veille Stratégique',
+    short_name: 'Hub Veille',
+    start_url: '/',
+    display: 'standalone',
+    background_color: '#F7F6F3',
+    theme_color: '#1A1917',
+    icons: [{ src: icon, sizes: '192x192', type: 'image/png' }]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+  document.getElementById('manifest-link').href = URL.createObjectURL(blob);
+}
+
+function generateIcon() {
+  const c = document.createElement('canvas');
+  c.width = 192; c.height = 192;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#1A1917';
+  ctx.roundRect(0, 0, 192, 192, 32);
+  ctx.fill();
+  ctx.fillStyle = '#1D9E75';
+  ctx.fillRect(24, 24, 6, 144);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = 'bold 72px serif';
+  ctx.fillText('H', 52, 130);
+  return c.toDataURL('image/png');
+}
+
+// ── STORAGE ──
+function loadFromLocalStorage() {
+  try {
+    const s = localStorage.getItem('hub_veille_v1');
+    if (s) state = JSON.parse(s);
+  } catch(e) {}
+}
+
+function saveToLocalStorage() {
+  try { localStorage.setItem('hub_veille_v1', JSON.stringify(state)); } catch(e) {}
+}
+
+async function loadFromKV() {
+  try {
+    const res = await fetch('/data');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.newsletters && Object.keys(data.newsletters).length) state.newsletters = data.newsletters;
+    if (data.history && data.history.length) state.history = data.history;
+  } catch(e) {}
+}
+
+async function saveToKV() {
+  try {
+    await fetch('/data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ newsletters: state.newsletters, history: state.history })
+    });
+  } catch(e) {}
+}
+
+// ── GENERATE ──
+async function refreshAll() {
+  const btn = document.getElementById('btn-refresh-all');
+  btn.disabled = true;
+  btn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite"></div> Génération...';
+  document.getElementById('progress-wrap').style.display = 'block';
+  setProgress(2);
+
+  for (let i = 0; i < TOPICS.length; i++) {
+    const t = TOPICS[i];
+    setProgress(5 + (i / TOPICS.length) * 88);
+    setTopicLoading(t.id);
+    await generateOne(t);
+    renderOverview();
+  }
+
+  setProgress(100);
+  setTimeout(() => {
+    document.getElementById('progress-wrap').style.display = 'none';
+    setProgress(0);
+  }, 600);
+
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg> Tout actualiser';
+  updateLastUpdate();
+  saveToLocalStorage();
+  await saveToKV();
+}
+
+async function generateOne(topic) {
+  try {
+    const res = await fetch('/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: [{ role: 'user', content: topic.prompt }] })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || '';
+    archiveIfExists(topic);
+    state.newsletters[topic.id] = {
+      text,
+      date: todayStr(),
+      week: weekStr(),
+      memo: extractMemo(text)
+    };
+    renderPanel(topic.id);
+  } catch(e) {
+    state.newsletters[topic.id] = { text: 'Erreur : ' + e.message, date: todayStr(), week: weekStr(), memo: '' };
+    renderPanel(topic.id);
+  }
+}
+
+async function generateSingle(id) {
+  const topic = TOPICS.find(t => t.id === id);
+  setTopicLoading(id);
+  await generateOne(topic);
+  renderOverview();
+  updateLastUpdate();
+  saveToLocalStorage();
+  await saveToKV();
+}
+
+function archiveIfExists(topic) {
+  const prev = state.newsletters[topic.id];
+  if (!prev || !prev.text) return;
+  if (!state.history) state.history = [];
+  state.history.unshift({
+    id: topic.id, label: topic.label,
+    color: topic.color, date: prev.date,
+    week: prev.week, memo: prev.memo || ''
+  });
+  if (state.history.length > 50) state.history = state.history.slice(0, 50);
+}
+
+function extractMemo(text) {
+  const lines = text.split('\n').filter(l => l.trim().length > 40);
+  return lines.slice(0, 3).map(l => l.trim().replace(/^[#*\-–—]+\s*/, '').substring(0, 100)).join('\n');
+}
+
+// ── RENDER ──
+function renderAll() {
+  renderOverview();
+  TOPICS.forEach(t => renderPanel(t.id));
+  renderHistory();
+  updateLastUpdate();
+}
+
+function renderOverview() {
+  const grid = document.getElementById('overview-grid');
+  grid.innerHTML = TOPICS.map(t => {
+    const n = state.newsletters[t.id];
+    const ok = n && n.text && !n.text.startsWith('Erreur');
+    const snippet = ok ? (n.memo ? n.memo.split('\n')[0] : n.text.substring(0, 100) + '...') : 'Pas encore généré';
+    const statusHtml = ok
+      ? `<span class="tc-status status-ok">${n.week || n.date}</span>`
+      : `<span class="tc-status status-no">—</span>`;
+    const audienceShort = t.audience.slice(0, 2).join(', ') + (t.audience.length > 2 ? '...' : '');
+    return `<div class="topic-card ${t.cls}" onclick="switchTo('${t.id}')">
+      <div class="tc-label" style="color:${t.color}">${t.label} ${statusHtml}</div>
+      <div class="tc-audience">${audienceShort}</div>
+      <div class="tc-snippet">${snippet}</div>
+    </div>`;
+  }).join('');
+}
+
+function setTopicLoading(id) {
+  const el = document.getElementById('view-' + id);
+  if (!el) return;
+  const topic = TOPICS.find(t => t.id === id);
+  el.innerHTML = buildPanelShell(topic, `
+    <div class="nl-loading">
+      <div class="spinner"></div>
+      <p>Génération en cours...</p>
+    </div>`);
+  const card = document.querySelector(`.topic-card.${topic.cls} .tc-status`);
+  if (card) { card.className = 'tc-status status-loading'; card.textContent = '...'; }
+}
+
+function renderPanel(id) {
+  const el = document.getElementById('view-' + id);
+  if (!el) return;
+  const topic = TOPICS.find(t => t.id === id);
+  const n = state.newsletters[id];
+  if (!n) {
+    el.innerHTML = buildPanelShell(topic, `<div class="nl-empty">Pas encore de newsletter.<br>Cliquez sur <strong>Tout actualiser</strong> ou sur le bouton ci-dessus.</div>`);
+    return;
+  }
+  const sections = parseNewsletter(n.text);
+  let bodyHtml;
+  if (sections.length >= 2) {
+    bodyHtml = sections.map(s => `
+      <div class="nl-section">
+        <div class="nl-section-label">${s.title}</div>
+        <div class="nl-section-body">${s.body}</div>
+      </div>`).join('');
+    bodyHtml = `<div class="nl-content">${bodyHtml}</div>`;
+  } else {
+    bodyHtml = `<div class="nl-raw">${n.text}</div>`;
+  }
+  el.innerHTML = buildPanelShell(topic, bodyHtml, n);
+}
+
+function buildPanelShell(topic, bodyHtml, n) {
+  const pills = topic.audience.map(a => `<span class="atag">${a}</span>`).join('');
+  const week = n ? (n.week || n.date) : '';
+  return `
+    <div class="nl-header">
+      <div>
+        <div class="nl-title" style="color:${topic.color}">${topic.label}</div>
+        <div class="nl-meta">${week ? 'Édition du ' + week : 'Aucune édition générée'}</div>
+        <div class="audience-tags">${pills}</div>
+      </div>
+      <div class="nl-actions">
+        ${n ? `<button class="btn-action" onclick="copyNewsletter('${topic.id}')">Copier</button>` : ''}
+        <button class="btn-action btn-gen" onclick="generateSingle('${topic.id}')">Générer ↻</button>
+      </div>
+    </div>
+    <div class="nl-body">${bodyHtml}</div>`;
+}
+
+function parseNewsletter(text) {
+  const LABELS = ['TENDANCE DU MOMENT','CAS ENTREPRISE','À PLACER EN DÎNER','CONCEPT DE LA SEMAINE'];
+  const sections = [];
+  let current = null;
+  for (const line of text.split('\n')) {
+    const trimmed = line.trim();
+    const match = LABELS.find(l => trimmed.toUpperCase().includes(l));
+    if (match) {
+      if (current) sections.push(current);
+      current = { title: match, body: '' };
+    } else if (current) {
+      current.body += (current.body ? '\n' : '') + line;
+    }
+  }
+  if (current) sections.push(current);
+  return sections.map(s => ({ ...s, body: s.body.trim() })).filter(s => s.body.length > 10);
+}
+
+function renderHistory() {
+  const el = document.getElementById('history-container');
+  const hist = state.history || [];
+  if (!hist.length) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:14px;padding:2rem 0">L\'historique se constitue à chaque nouvelle actualisation.</div>';
+    return;
+  }
+  const grouped = {};
+  hist.forEach(h => {
+    const k = h.week || h.date;
+    if (!grouped[k]) grouped[k] = [];
+    grouped[k].push(h);
+  });
+  el.innerHTML = Object.entries(grouped).map(([week, items]) => `
+    <div class="history-week">
+      <div class="history-week-label">${week}</div>
+      ${items.map(h => `
+        <div class="history-item">
+          <div class="history-item-header">
+            <span class="h-dot" style="background:${h.color}"></span>
+            <span class="h-label">${h.label}</span>
+            <span class="h-date">${h.date}</span>
+          </div>
+          <div class="h-memo">${h.memo || '—'}</div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+// ── UTILS ──
+function switchTo(id) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const btn = document.querySelector(`.nav-btn[data-view="${id}"]`);
+  if (btn) btn.classList.add('active');
+  const panel = document.getElementById('view-' + id);
+  if (panel) panel.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+document.getElementById('main-nav').addEventListener('click', e => {
+  const btn = e.target.closest('.nav-btn');
+  if (!btn) return;
+  switchTo(btn.dataset.view);
+});
+
+function copyNewsletter(id) {
+  const n = state.newsletters[id];
+  if (n) navigator.clipboard.writeText(n.text);
+}
+
+function setProgress(pct) {
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function todayStr() {
+  return new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+function weekStr() {
+  const now = new Date();
+  const mon = new Date(now);
+  mon.setDate(now.getDate() - now.getDay() + 1);
+  return 'Sem. ' + mon.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long' });
+}
+
+function updateLastUpdate() {
+  const dates = Object.values(state.newsletters).map(n => n.date).filter(Boolean);
+  const el = document.getElementById('last-update');
+  el.textContent = dates.length ? 'Mis à jour : ' + dates.sort().reverse()[0] : 'Jamais actualisé';
+}
+</script>
+</body>
+</html>
